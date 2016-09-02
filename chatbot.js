@@ -6,6 +6,7 @@ const joker = require('./services/jokeService.js');
 
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
+const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Authentication extension
 var ClientAuthExt = function() {};
@@ -23,6 +24,9 @@ ClientAuthExt.prototype.incoming = (message, callback) => {
   if(message.channel == '/meta/handshake') {
     if(message.successful) {
       console.log('Successfuly subscribed to room: ', ROOM_ID);
+      if (DEPLOY_FLAG) {
+        send("Deployment Successful");
+      }
     } else {
       console.log('Something went wrong: ', message.error);
     }
@@ -80,8 +84,14 @@ function reply_to_user(user, message) {
 
 
 function send(message, username) {
+  var text = message;
+
+  if (username) {
+    text = "@" + username + " " + text;
+  }
+ 
   const body = {
-    "text": "@" + username + " " + message
+    text
   };
 
   request({
