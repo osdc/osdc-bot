@@ -80,7 +80,7 @@ function reply_to_user(user, message) {
       });
     }
 
-    if (data.lastIndexOf("howdoi" === 0)) {
+    if (data.lastIndexOf("howdoi") === 0) {
       const query = encodeURIComponent(data.slice(7, data.length));
       console.log("[INFO] howdoi");
       request({
@@ -88,11 +88,27 @@ function reply_to_user(user, message) {
         method: "GET"
       }, (error, response, body) => {
         console.log('HowdoI request successful');
-        console.log(response);
-        send(response);
+        console.log(body);
+        // send(body);
+        sendHowDoI(body);
       });
     }
   }
+}
+
+
+function sendHowDoI(output) {
+  request({
+    url: "https://api.gitter.im/v1/rooms/" + ROOM_ID + "/chatMessages",
+    headers: {
+      "Authorization" : "Bearer " + TOKEN
+    },
+    method: "POST",
+    json: true,
+    body: {text: output}
+  }, (error, response, body) => {
+    console.log(response);
+  });
 }
 
 
