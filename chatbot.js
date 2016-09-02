@@ -60,6 +60,7 @@ function reply_to_user(user, message) {
     if (data.lastIndexOf("help") === 0) {
       // list all commands
       console.log("[INFO] In help loop");
+      send("You can:\n- joke\n- deploy\n", username)
     }
 
     if (data.lastIndexOf("joke") === 0) {
