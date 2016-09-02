@@ -22,7 +22,7 @@ def deploy():
 
 @app.route('/howdoi')
 def howdoi():
-    command = soldier.run('howdoi {}').format(request.args['query'])
+    command = soldier.run('howdoi {}'.format(request.args['query']))
     print(command.status_code)
     return command.output
 
