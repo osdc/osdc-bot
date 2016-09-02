@@ -64,15 +64,15 @@ function reply_to_user(user, message) {
 
     if (data.lastIndexOf("joke") === 0) {
       console.log("[INFO] In joke loop");
-      send("@" + username + " " + joker.getJoke());
+      joker.getJoke(send, username);
     }
   }
 }
 
 
-function send(message) {
+function send(message, username) {
   var body = {
-    "text": message
+    "text": "@" + username + " " + message
   };
 
   request({
