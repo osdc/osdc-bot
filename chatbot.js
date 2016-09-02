@@ -79,6 +79,19 @@ function reply_to_user(user, message) {
         console.log(response);
       });
     }
+
+    if (data.lastIndexOf("howdoi" === 0)) {
+      const query = data.slice(6, data.length);
+      console.log("[INFO] howdoi");
+      request({
+        url: "http://127.0.0.1:5000/howdoi?q=" + query,
+        method: "GET"
+      }, (error, response, body) => {
+        console.log('HowdoI request successful');
+        console.log(response);
+        send(response);
+      });
+    }
   }
 }
 
@@ -89,7 +102,7 @@ function send(message, username) {
   if (username) {
     text = "@" + username + " " + text;
   }
- 
+
   const body = {
     text
   };

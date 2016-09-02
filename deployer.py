@@ -20,6 +20,13 @@ def deploy():
     return 'Deployed'
 
 
+@app.route('/howdoi')
+def howdoi():
+    command = soldier.run('howdoi {}').format(request.args['query'])
+    print(command.status_code)
+    return command.output
+
+
 def runner():
     try:
         app.run()
