@@ -6,13 +6,14 @@ const joker = require('./services/jokeService.js');
 
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
+
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Authentication extension
 var ClientAuthExt = function() {};
 
 ClientAuthExt.prototype.outgoing = (message, callback) => {
-  if (message.channel == '/meta/handshake') {
+  if (message.channel === '/meta/handshake') {
     if (!message.ext) { message.ext = {}; }
     message.ext.token = TOKEN;
   }
@@ -21,7 +22,7 @@ ClientAuthExt.prototype.outgoing = (message, callback) => {
 };
 
 ClientAuthExt.prototype.incoming = (message, callback) => {
-  if(message.channel == '/meta/handshake') {
+  if(message.channel === '/meta/handshake') {
     if(message.successful) {
       console.log('Successfuly subscribed to room: ', ROOM_ID);
       if (DEPLOY_FLAG) {
@@ -59,6 +60,7 @@ function reply_to_user(user, message) {
 
   if (message.lastIndexOf("@osdc-bot") === 0) {
     const data = message.slice(10, message.length);
+    console.log(data);
     if (data.lastIndexOf("help") === 0) {
       // list all commands
       console.log("[INFO] In help loop");
@@ -82,58 +84,36 @@ function reply_to_user(user, message) {
 
     if (data.lastIndexOf("howdoi") === 0) {
       const query = encodeURIComponent(data.slice(7, data.length));
+      console.log(query);
       console.log("[INFO] howdoi");
       request({
-        url: "http://127.0.0.1:5000/howdoi?query=" + query,
+        url: `http://127.0.0.1:5000/howdoi?query=${query}`,
         method: "GET"
       }, (error, response, body) => {
         console.log('HowdoI request successful');
         console.log(body);
-        // send(body);
-        sendHowDoI(body);
+        // send(`\`\`\`\n${body}\n\`\`\``);
       });
     }
   }
 }
 
-
-function sendHowDoI(output) {
+function _postOnChat(message) {
   request({
-    url: "https://api.gitter.im/v1/rooms/" + ROOM_ID + "/chatMessages",
+    url: `https://api.gitter.im/v1/rooms/${ROOM_ID}/chatMessages`,
     headers: {
-      "Authorization" : "Bearer " + TOKEN
+      Authorization : `Bearer ${TOKEN}`
     },
     method: "POST",
     json: true,
-    body: {text: output}
+    body: {text: message}
   }, (error, response, body) => {
     console.log(response);
   });
 }
-
 
 function send(message, username) {
-  var text = message;
-
-  if (username) {
-    text = "@" + username + " " + text;
-  }
-
-  const body = {
-    text
-  };
-
-  request({
-    url: "https://api.gitter.im/v1/rooms/" + ROOM_ID + "/chatMessages",
-    headers: {
-      "Authorization" : "Bearer " + TOKEN
-    },
-    method: "POST",
-    json: true,
-    body: body
-  }, (error, response, body) => {
-    console.log(response);
-  });
+  _postOnChat(username ? `@${username} ${text}` : message);
 }
 
-client.subscribe('/api/v1/rooms/' + ROOM_ID + '/chatMessages', messageHandler, {});
+client.subscribe(`/api/v1/rooms/${ROOM_ID}/chatMessages`, messageHandler, {});
