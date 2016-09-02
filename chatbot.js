@@ -1,29 +1,28 @@
-var Faye = require('faye');
-var request = require('request');
+const Faye = require('faye');
+const request = require('request');
 
-var config = require('./config');
-var joker = require('./services/jokeService.js');
+const config = require('./config');
+const joker = require('./services/jokeService.js');
 
-var token   = config.token
-var roomId  = config.roomId;
+const ROOM_ID  = config.roomId;
+const TOKEN   = config.token;
 
 // Authentication extension
-
 var ClientAuthExt = function() {};
 
-ClientAuthExt.prototype.outgoing = function(message, callback) {
+ClientAuthExt.prototype.outgoing = (message, callback) => {
   if (message.channel == '/meta/handshake') {
     if (!message.ext) { message.ext = {}; }
-    message.ext.token = token;
+    message.ext.token = TOKEN;
   }
 
   callback(message);
 };
 
-ClientAuthExt.prototype.incoming = function(message, callback) {
+ClientAuthExt.prototype.incoming = (message, callback) => {
   if(message.channel == '/meta/handshake') {
     if(message.successful) {
-      console.log('Successfuly subscribed to room: ', roomId);
+      console.log('Successfuly subscribed to room: ', ROOM_ID);
     } else {
       console.log('Something went wrong: ', message.error);
     }
@@ -34,14 +33,13 @@ ClientAuthExt.prototype.incoming = function(message, callback) {
 
 
 // Faye client
-
-var client = new Faye.Client('https://ws.gitter.im/faye', {timeout: 60, retry: 5, interval: 1});
+const client = new Faye.Client('https://ws.gitter.im/faye', {timeout: 60, retry: 5, interval: 1});
 
 // Add Client Authentication extension
 client.addExtension(new ClientAuthExt());
 
 // A dummy handler to echo incoming messages
-var messageHandler = function(msg) {
+var messageHandler = (msg) => {
   if (msg.model && msg.model.fromUser) {
     console.log("Message: ", msg.model.text);
     console.log("From: ", msg.model.fromUser.displayName);
@@ -52,11 +50,11 @@ var messageHandler = function(msg) {
 
 
 function reply_to_user(user, message) {
-  var displayName = user.displayName;
-  var username = user.username;
+  const displayName = user.displayName;
+  const username = user.username;
 
   if (message.lastIndexOf("@osdc-bot") === 0) {
-    var data = message.slice(10, message.length);
+    const data = message.slice(10, message.length);
     if (data.lastIndexOf("help") === 0) {
       // list all commands
       console.log("[INFO] In help loop");
@@ -73,7 +71,7 @@ function reply_to_user(user, message) {
       request({
         url: "http://127.0.0.1:5000/deploy",
         method: "GET"
-      }, function (error, response, body) {
+      }, (error, response, body) => {
         console.log(response);
       });
     }
@@ -82,21 +80,21 @@ function reply_to_user(user, message) {
 
 
 function send(message, username) {
-  var body = {
+  const body = {
     "text": "@" + username + " " + message
   };
 
   request({
-    url: "https://api.gitter.im/v1/rooms/"+ roomId + "/chatMessages",
+    url: "https://api.gitter.im/v1/rooms/" + ROOM_ID + "/chatMessages",
     headers: {
-      "Authorization" : "Bearer " + token
+      "Authorization" : "Bearer " + TOKEN
     },
     method: "POST",
     json: true,
-    body: body, 
-  }, function (error, response, body){
+    body: body
+  }, (error, response, body) => {
     console.log(response);
   });
 }
 
-client.subscribe('/api/v1/rooms/' + roomId + '/chatMessages', messageHandler, {});
+client.subscribe('/api/v1/rooms/' + ROOM_ID + '/chatMessages', messageHandler, {});
