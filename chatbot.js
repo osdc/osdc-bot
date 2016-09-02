@@ -76,6 +76,10 @@ function reply_to_user(user, message) {
         console.log(response);
       });
     }
+
+    if (data.lastIndexOf("td") === 0) {
+      send("Deploy working", username)
+    }
   }
 }
 
