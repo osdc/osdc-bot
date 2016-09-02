@@ -1,6 +1,8 @@
 var Faye = require('faye');
 var request = require('request');
+
 var config = require('./config');
+var joker = require('./services/jokeService.js');
 
 var token   = config.token
 var roomId  = config.roomId;
@@ -62,7 +64,7 @@ function reply_to_user(user, message) {
 
     if (data.lastIndexOf("joke") === 0) {
       console.log("[INFO] In joke loop");
-      send("@" + username + " Sorry, out of jokes for now!");
+      send("@" + username + " " + joker.getJoke());
     }
   }
 }
