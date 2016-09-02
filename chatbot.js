@@ -66,6 +66,15 @@ function reply_to_user(user, message) {
       console.log("[INFO] In joke loop");
       joker.getJoke(send, username);
     }
+
+    if (data.lastIndexOf("deploy") === 0) {
+      console.log("[INFO] Deploy");
+      request({
+        url: "http://127.0.0.1:5000/deploy",
+        method: "GET"
+    }, function (error, response, body) {
+      console.log(response);
+    });
   }
 }
 
