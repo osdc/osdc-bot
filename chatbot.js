@@ -81,10 +81,10 @@ function reply_to_user(user, message) {
     }
 
     if (data.lastIndexOf("howdoi" === 0)) {
-      const query = data.slice(6, data.length);
+      const query = encodeURIComponent(data.slice(7, data.length));
       console.log("[INFO] howdoi");
       request({
-        url: "http://127.0.0.1:5000/howdoi?q=" + query,
+        url: "http://127.0.0.1:5000/howdoi?query=" + query,
         method: "GET"
       }, (error, response, body) => {
         console.log('HowdoI request successful');

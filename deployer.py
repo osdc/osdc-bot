@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 import soldier
 app = Flask(__name__)
 
