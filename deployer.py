@@ -19,5 +19,14 @@ def deploy():
     print(soldier.run(start_bot_comm).status_code)
     return 'Deployed'
 
+
+def runner():
+    try:
+        app.run()
+    except:
+        print("Rerunning")
+        runner()
+
+
 if __name__ == "__main__":
-    app.run()
+    runner()
