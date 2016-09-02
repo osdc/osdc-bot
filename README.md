@@ -6,5 +6,7 @@ Run with:
 
 ```
 $ npm install
+$ pip install -r requirements.txt
 $ node chatbot.js
+$ python server.py
 ```
