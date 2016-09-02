@@ -72,9 +72,10 @@ function reply_to_user(user, message) {
       request({
         url: "http://127.0.0.1:5000/deploy",
         method: "GET"
-    }, function (error, response, body) {
-      console.log(response);
-    });
+      }, function (error, response, body) {
+        console.log(response);
+      });
+    }
   }
 }
 
