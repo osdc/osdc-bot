@@ -92,7 +92,7 @@ function reply_to_user(user, message) {
       }, (error, response, body) => {
         console.log('HowdoI request successful');
         console.log(body);
-        // send(`\`\`\`\n${body}\n\`\`\``);
+        send(body);
       });
     }
   }
