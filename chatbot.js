@@ -14,7 +14,8 @@ const FAYE_CLIENT_URL = 'https://ws.gitter.im/faye';
 const SERVER_PREFIX_URL = "http://127.0.0.1:5000";
 const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
 const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
-const SEND_TO_CHAT_URL = `https://api.gitter.im/v1/rooms/${ROOM_ID}/chatMessages`;
+const CHATROOM_SUFFIX_URL = `/v1/rooms/${ROOM_ID}/chatMessages`;
+const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
 
 const BOT_MENTION_NAME = "@osdc-bot";
 const BOT_ACTIONS = {
@@ -50,12 +51,11 @@ ClientAuthExt.prototype.incoming = (message, callback) => {
 };
 
 // Faye client
-const clientOptions =  {
+const client = new Faye.Client(FAYE_CLIENT_URL, {
   timeout: 60,
   retry: 5,
   interval: 1
-};
-const client = new Faye.Client(FAYE_CLIENT_URL, clientOptions);
+});
 
 // Add Client Authentication extension
 client.addExtension(new ClientAuthExt());
@@ -75,10 +75,19 @@ function _getStartsWith(parsedMessage) {
   for (var botAction in BOT_ACTIONS) {
     if (parsedMessage.startsWith(BOT_ACTIONS[botAction])) {
       result = BOT_ACTIONS[botAction];
-      console.log(`[INFO] In loop {result}`);
+      console.log(`[INFO] In loop ${result}`);
       break;
     }
   }
+  return result;
+}
+
+function _getBotHelp() {
+  var resultString = "You can:";
+  for (var botAction in BOT_ACTIONS) {
+    resultString += `\n- ${BOT_ACTIONS[botAction]}`;
+  }
+  return resultString;
 }
 
 function reply_to_user(user, message) {
@@ -90,7 +99,7 @@ function reply_to_user(user, message) {
     console.log(parsedMessage);
     const startsWithString = _getStartsWith(parsedMessage);
     if (startsWithString === BOT_ACTIONS.HELP) {
-      send("You can:\n- joke\n- deploy\n", username);
+      send(_getBotHelp(), username);
     }
 
     if (startsWithString === BOT_ACTIONS.JOKE) {
@@ -122,7 +131,7 @@ function reply_to_user(user, message) {
 
 function _postOnChat(message) {
   request({
-    url: SEND_TO_CHAT_URL,
+    url: CHATROOM_URL,
     headers: {
       Authorization : `Bearer ${TOKEN}`
     },
@@ -140,4 +149,4 @@ function send(message, username) {
   _postOnChat(username ? `@${username} ${message}` : message);
 }
 
-client.subscribe(`/api/v1/rooms/${ROOM_ID}/chatMessages`, messageHandler, {});
+client.subscribe(`/api${CHATROOM_SUFFIX_URL}`, messageHandler, {});
