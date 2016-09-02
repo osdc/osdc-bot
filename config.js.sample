@@ -1,0 +1,6 @@
+var config = {
+  'token': '',
+  'roomId': '',
+}
+
+module.exports = config;
