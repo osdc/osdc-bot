@@ -78,7 +78,7 @@ function reply_to_user(user, message) {
     }
 
     if (data.lastIndexOf("td") === 0) {
-      send("Deploy working", username)
+      send("Deploy working !!", username)
     }
   }
 }
