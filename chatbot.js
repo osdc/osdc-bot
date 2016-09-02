@@ -113,7 +113,7 @@ function _postOnChat(message) {
 }
 
 function send(message, username) {
-  _postOnChat(username ? `@${username} ${text}` : message);
+  _postOnChat(username ? `@${username} ${message}` : message);
 }
 
 client.subscribe(`/api/v1/rooms/${ROOM_ID}/chatMessages`, messageHandler, {});
