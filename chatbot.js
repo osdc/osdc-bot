@@ -3,6 +3,7 @@ const Faye = require('faye');
 const request = require('request');
 
 const constants = require('./constants');
+const utils = require('./utils');
 const joker = require('./services/jokeService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
@@ -52,29 +53,6 @@ const messageHandler = (msg) => {
   }
 };
 
-function _getStartsWith(parsedMessage) {
-  let result = null;
-  if (!parsedMessage) {
-    return result;
-  }
-  for (let botAction in constants.BOT_ACTIONS) {
-    if (parsedMessage.startsWith(constants.BOT_ACTIONS[botAction])) {
-      result = constants.BOT_ACTIONS[botAction];
-      console.log(`[INFO] In loop ${result}`);
-      break;
-    }
-  }
-  return result;
-}
-
-function _getBotHelp() {
-  let resultString = "You can:";
-  for (let botAction in constants.BOT_ACTIONS) {
-    resultString += `\n- ${constants.BOT_ACTIONS[botAction]}`;
-  }
-  return resultString;
-}
-
 function reply_to_user(user, message) {
   const displayName = user.displayName;
   const username = user.username;
@@ -82,9 +60,9 @@ function reply_to_user(user, message) {
   if (message.startsWith(constants.BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
     console.log(parsedMessage);
-    const startsWithString = _getStartsWith(parsedMessage);
+    const startsWithString = utils.getStartsWith(parsedMessage);
     if (startsWithString === constants.BOT_ACTIONS.HELP) {
-      send(_getBotHelp(), username);
+      send(utils.generateBotHelp(), username);
     }
 
     if (startsWithString === constants.BOT_ACTIONS.JOKE) {
@@ -134,7 +112,7 @@ function send(message, username) {
 
 client.subscribe(`/api${constants.CHATROOM_SUFFIX_URL}`, messageHandler, {});
 
-module.exports = {
-  getStartsWith: _getStartsWith,
-  getBotActions: () => (constants.BOT_ACTIONS)
-};
+// module.exports = {
+//   getStartsWith: _getStartsWith,
+//   getBotActions: () => (constants.BOT_ACTIONS)
+// };
