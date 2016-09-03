@@ -72,6 +72,9 @@ const messageHandler = (msg) => {
 
 function _getStartsWith(parsedMessage) {
   var result = null;
+  if (!parsedMessage) {
+    return result;
+  }
   for (var botAction in BOT_ACTIONS) {
     if (parsedMessage.startsWith(BOT_ACTIONS[botAction])) {
       result = BOT_ACTIONS[botAction];
@@ -150,3 +153,8 @@ function send(message, username) {
 }
 
 client.subscribe(`/api${CHATROOM_SUFFIX_URL}`, messageHandler, {});
+
+module.exports = {
+  getStartsWith: _getStartsWith,
+  getBotActions: () => (BOT_ACTIONS)
+};
