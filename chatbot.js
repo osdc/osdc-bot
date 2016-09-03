@@ -1,3 +1,4 @@
+'use strict';
 const Faye = require('faye');
 const request = require('request');
 
@@ -7,7 +8,7 @@ const joker = require('./services/jokeService.js');
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Authentication extension
-var ClientAuthExt = function() {};
+let ClientAuthExt = function() {};
 
 ClientAuthExt.prototype.outgoing = (message, callback) => {
   if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
@@ -52,11 +53,11 @@ const messageHandler = (msg) => {
 };
 
 function _getStartsWith(parsedMessage) {
-  var result = null;
+  let result = null;
   if (!parsedMessage) {
     return result;
   }
-  for (var botAction in constants.BOT_ACTIONS) {
+  for (let botAction in constants.BOT_ACTIONS) {
     if (parsedMessage.startsWith(constants.BOT_ACTIONS[botAction])) {
       result = constants.BOT_ACTIONS[botAction];
       console.log(`[INFO] In loop ${result}`);
@@ -67,8 +68,8 @@ function _getStartsWith(parsedMessage) {
 }
 
 function _getBotHelp() {
-  var resultString = "You can:";
-  for (var botAction in constants.BOT_ACTIONS) {
+  let resultString = "You can:";
+  for (let botAction in constants.BOT_ACTIONS) {
     resultString += `\n- ${constants.BOT_ACTIONS[botAction]}`;
   }
   return resultString;
@@ -100,13 +101,11 @@ function reply_to_user(user, message) {
     }
 
     if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
-      var query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
-      console.log(query);
+      const query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
       request({
         url: constants.SERVER_HOWDOI_PREFIX_URL + query,
         method: "GET"
       }, (error, response, body) => {
-        console.log(body);
         send(body);
       });
     }

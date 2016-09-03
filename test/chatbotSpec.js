@@ -1,5 +1,5 @@
-var expect = require("chai").expect;
-var chatbot = require("../chatbot");
+const expect = require("chai").expect;
+const chatbot = require("../chatbot");
 
 describe("ChatBot Utils", function() {
   it("should get startsWith correctly", function() {
