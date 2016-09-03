@@ -1,11 +1,11 @@
 var request = require('request');
-
+var URL =  'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
 module.exports = function (cb,username,input) {
     'use strict';
     let apiOptions = {
-        url :`https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=${input}`,
+        url :`${URL}${input}`,
         method : 'GET',
-        json : {}
+        json : {} //it is required
     };
     request(apiOptions,(err,response,data)=>{
        if(!err && response.statusCode==200){
@@ -16,10 +16,12 @@ module.exports = function (cb,username,input) {
                }
            }
            dataArr.forEach((curr,index)=>{
-               result+=`\n ## ${index+1}[${curr.title}](https://en.wikipedia.org/?curid='${curr.pageId})\n ${curr.extract}\n`;
+               result+=`\n ## ${index+1}[${curr.title}](https://en.wikipedia.org/?curid=${curr.pageid})\n ${curr.extract}\n`;
            });
            console.log(result);
            cb(result,username);
-    }
+    } else {
+           cb(err ?err.message :'unable to find',username);
+       }
     });
 };
