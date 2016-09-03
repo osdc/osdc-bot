@@ -4,6 +4,9 @@ const request = require('request');
 const config = require('./config');
 const joker = require('./services/jokeService.js');
 const wiki = require('./services/wikiService');
+const weather = require('./services/weather');
+const places = require('./services/mapService');
+
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
 
@@ -24,6 +27,8 @@ const BOT_ACTIONS = {
   DEPLOY: 'deploy',
   HOWDOI: 'howdoi',
   WIKI : 'wiki'
+  WEATHER: 'weather',
+  PLACES: 'locate'
 };
 
 // Authentication extension
@@ -82,7 +87,6 @@ function _getStartsWith(parsedMessage) {
   }
   return result;
 }
-
 function _getBotHelp() {
   var resultString = "You can:";
   for (var botAction in BOT_ACTIONS) {
@@ -94,11 +98,11 @@ function _getBotHelp() {
 function reply_to_user(user, message) {
   const displayName = user.displayName;
   const username = user.username;
-
+  const splitMessage = parsedMessage.split(' ');
   if (message.startsWith(BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(BOT_MENTION_NAME.length + 1);
-    console.log(parsedMessage);
     const startsWithString = _getStartsWith(parsedMessage);
+
     if (startsWithString === BOT_ACTIONS.HELP) {
       send(_getBotHelp(), username);
     }
@@ -112,24 +116,32 @@ function reply_to_user(user, message) {
         url: SERVER_DEPLOY_URL,
         method: "GET"
       }, (error, response, body) => {
-        console.log(response);
       });
     }
 
     if (startsWithString === BOT_ACTIONS.HOWDOI) {
       var query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
-      console.log(query);
       request({
         url: SERVER_HOWDOI_PREFIX_URL + query,
         method: "GET"
       }, (error, response, body) => {
-        console.log(body);
         send(body);
       });
     }
+
     if (startsWithString === BOT_ACTIONS.WIKI) {
       var requestedData = parsedMessage.slice(5, parsedMessage.length);
       wiki(send, username, requestedData);
+    }
+
+    if (startsWithString === BOT_ACTIONS.WEATHER) {
+      const cityName = `${splitMessage[1]} ${splitMessage[2]}`;
+      weather.getWeather(send, username,cityName);
+    }
+
+    if (startsWithString === BOT_ACTIONS.PLACES) {
+      const placeName = `${splitMessage[1]} ${splitMessage[2]}`;
+      places.getPlaces(send, username, placeName);
     }
   }
 }
@@ -146,7 +158,6 @@ function _postOnChat(message) {
       text: message
     }
   }, (error, response, body) => {
-    console.log(response);
   });
 }
 
