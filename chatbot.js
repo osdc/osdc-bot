@@ -3,7 +3,7 @@ const request = require('request');
 
 const config = require('./config');
 const joker = require('./services/jokeService.js');
-
+const wiki = require('./services/wikiService');
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
 
@@ -22,7 +22,8 @@ const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',
   DEPLOY: 'deploy',
-  HOWDOI: 'howdoi'
+  HOWDOI: 'howdoi',
+  WIKI : 'wiki'
 };
 
 // Authentication extension
@@ -69,7 +70,6 @@ const messageHandler = (msg) => {
     reply_to_user(msg.model.fromUser, msg.model.text);
   }
 };
-
 function _getStartsWith(parsedMessage) {
   var result = null;
   for (var botAction in BOT_ACTIONS) {
@@ -125,6 +125,10 @@ function reply_to_user(user, message) {
         console.log(body);
         send(body);
       });
+    }
+    if(startsWithString === BOT_ACTIONS.WIKI){
+      var requestedData = parsedMessage.slice(5,parsedMessage.length);
+      wiki(send,username,requestedData);
     }
   }
 }
