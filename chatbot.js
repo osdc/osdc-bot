@@ -70,6 +70,7 @@ const messageHandler = (msg) => {
     reply_to_user(msg.model.fromUser, msg.model.text);
   }
 };
+
 function _getStartsWith(parsedMessage) {
   var result = null;
   for (var botAction in BOT_ACTIONS) {
@@ -126,9 +127,9 @@ function reply_to_user(user, message) {
         send(body);
       });
     }
-    if(startsWithString === BOT_ACTIONS.WIKI){
-      var requestedData = parsedMessage.slice(5,parsedMessage.length);
-      wiki(send,username,requestedData);
+    if (startsWithString === BOT_ACTIONS.WIKI) {
+      var requestedData = parsedMessage.slice(5, parsedMessage.length);
+      wiki(send, username, requestedData);
     }
   }
 }
