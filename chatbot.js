@@ -5,7 +5,10 @@ const request = require('request');
 const constants = require('./constants');
 const utils = require('./utils');
 const api = require('./api');
-const joker = require('./services/jokeService.js');
+
+const joker = require('./services/jokeService');
+const howdoi = require('./services/howdoiService');
+const deployer = require('./services/deployService');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
@@ -20,6 +23,7 @@ const replyToUser = (user, message) => {
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
     console.log(parsedMessage);
     const startsWithString = utils.getStartsWith(parsedMessage);
+
     if (startsWithString === constants.BOT_ACTIONS.HELP) {
       api.postBotReply(utils.generateBotHelp(), username);
     }
@@ -29,22 +33,12 @@ const replyToUser = (user, message) => {
     }
 
     if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
-      request({
-        url: constants.SERVER_DEPLOY_URL,
-        method: "GET"
-      }, (error, response, body) => {
-        console.log(response);
-      });
+      deployer.deployToProd();
     }
 
     if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
-      const query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
-      request({
-        url: constants.SERVER_HOWDOI_PREFIX_URL + query,
-        method: "GET"
-      }, (error, response, body) => {
-        api.postBotReply(body);
-      });
+      const query = encodeURIComponent(parsedMessage.slice(7));
+      howdoi.getHowdoiResult(api.postBotReply, query);
     }
   }
 };
