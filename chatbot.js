@@ -102,16 +102,19 @@ function _getBotHelp() {
 function reply_to_user(user, message) {
   const displayName = user.displayName;
   const username = user.username;
+
   if (message.startsWith(BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(BOT_MENTION_NAME.length + 1);
     const startsWithString = _getStartsWith(parsedMessage);
     const cityName = parsedMessage.substr(parsedMessage.indexOf(' ')+1);
+
     if (startsWithString === BOT_ACTIONS.HELP) {
       send(_getBotHelp(), username);
     }
+
     if (startsWithString === BOT_ACTIONS.QUOTE){
-        quotation.getQuote(send, username);
-        }
+      quotation.getQuote(send, username);
+    }
 
     if (startsWithString === BOT_ACTIONS.JOKE) {
       joker.getJoke(send, username);
