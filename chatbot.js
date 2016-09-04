@@ -87,6 +87,7 @@ function _getStartsWith(parsedMessage) {
   }
   return result;
 }
+
 function _getBotHelp() {
   var resultString = "You can:";
   for (var botAction in BOT_ACTIONS) {
