@@ -17,7 +17,7 @@ const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const CHATROOM_SUFFIX_URL = `/v1/rooms/${ROOM_ID}/chatMessages`;
 const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
 
-const BOT_MENTION_NAME = "@osdc-bot";
+const BOT_MENTION_NAME = '@osdc-bot';
 const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',

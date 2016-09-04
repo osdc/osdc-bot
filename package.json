@@ -11,5 +11,8 @@
   "dependencies": {
     "faye": "~1.0.1",
     "request": "^2.74.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0"
   }
 }
