@@ -1,11 +1,12 @@
 var request = require('request');
-var URL =  'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
+var WIKI_PREFIX_URL =  'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
+
 module.exports = function (cb,username,input) {
     'use strict';
     let apiOptions = {
-        url :`${URL}${input}`,
+        url :`${WIKI_PREFIX_URL}${input}`,
         method : 'GET',
-        json : {} //it is required
+        json : {}
     };
     request(apiOptions,(err,response,data)=>{
        if(!err && response.statusCode==200){
