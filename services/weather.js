@@ -9,10 +9,8 @@ module.exports = {
       if (!error && response.statusCode == 200) {
         const weatherData = JSON.parse(body);
         const KELVIN_CELCIUS_OFFSET = 273;
-        var maxTempCelcius = weatherData.main.temp_max - KELVIN_CELCIUS_OFFSET;
-        var minTempCelcius = weatherData.main.temp_min - KELVIN_CELCIUS_OFFSET;
-        maxTempCelcius = real_min.toFixed(2);
-        minTempCelcius = real_max.toFixed(2);
+        const maxTempCelcius = (weatherData.main.temp_max - KELVIN_CELCIUS_OFFSET).toFixed(2);
+        const minTempCelcius = (weatherData.main.temp_min - KELVIN_CELCIUS_OFFSET).toFixed(2);
         message = `Humidity: ${weatherData.main.humidity}%\nMax Temperature: ${maxTempCelcius}C\nMin Temperature: ${minTempCelcius}C`;
         return callback(message, username);
       }

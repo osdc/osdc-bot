@@ -98,11 +98,11 @@ function _getBotHelp() {
 function reply_to_user(user, message) {
   const displayName = user.displayName;
   const username = user.username;
-  const splitMessage = parsedMessage.split(' ');
   if (message.startsWith(BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(BOT_MENTION_NAME.length + 1);
     const startsWithString = _getStartsWith(parsedMessage);
-
+    const splitMessage = parsedMessage.split(' ').splice(1);
+    const cityName = `${splitMessage.join(' ')}`;
     if (startsWithString === BOT_ACTIONS.HELP) {
       send(_getBotHelp(), username);
     }
@@ -135,13 +135,11 @@ function reply_to_user(user, message) {
     }
 
     if (startsWithString === BOT_ACTIONS.WEATHER) {
-      const cityName = `${splitMessage[1]} ${splitMessage[2]}`;
-      weather.getWeather(send, username,cityName);
+      weather.getWeather(send, username, cityName);
     }
 
     if (startsWithString === BOT_ACTIONS.PLACES) {
-      const placeName = `${splitMessage[1]} ${splitMessage[2]}`;
-      places.getPlaces(send, username, placeName);
+      places.getPlaces(send, username, cityName);
     }
   }
 }
