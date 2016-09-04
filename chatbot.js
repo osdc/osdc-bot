@@ -4,12 +4,50 @@ const request = require('request');
 
 const constants = require('./constants');
 const utils = require('./utils');
+const api = require('./api');
 const joker = require('./services/jokeService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Authentication extension
 let ClientAuthExt = function() {};
+
+const replyToUser = (user, message) => {
+  const displayName = user.displayName;
+  const username = user.username;
+
+  if (message.startsWith(constants.BOT_MENTION_NAME)) {
+    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
+    console.log(parsedMessage);
+    const startsWithString = utils.getStartsWith(parsedMessage);
+    if (startsWithString === constants.BOT_ACTIONS.HELP) {
+      api.postBotReply(utils.generateBotHelp(), username);
+    }
+
+    if (startsWithString === constants.BOT_ACTIONS.JOKE) {
+      joker.getJoke(api.postBotReply, username);
+    }
+
+    if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
+      request({
+        url: constants.SERVER_DEPLOY_URL,
+        method: "GET"
+      }, (error, response, body) => {
+        console.log(response);
+      });
+    }
+
+    if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
+      const query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
+      request({
+        url: constants.SERVER_HOWDOI_PREFIX_URL + query,
+        method: "GET"
+      }, (error, response, body) => {
+        api.postBotReply(body);
+      });
+    }
+  }
+};
 
 ClientAuthExt.prototype.outgoing = (message, callback) => {
   if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
@@ -24,7 +62,7 @@ ClientAuthExt.prototype.incoming = (message, callback) => {
     if(message.successful) {
       console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
       if (DEPLOY_FLAG) {
-        send("Deployment Successful");
+        api.postBotReply("Deployment Successful");
       }
     } else {
       console.log('Something went wrong: ', message.error);
@@ -49,70 +87,8 @@ const messageHandler = (msg) => {
     console.log("Message: ", msg.model.text);
     console.log("From: ", msg.model.fromUser.displayName);
 
-    reply_to_user(msg.model.fromUser, msg.model.text);
+    replyToUser(msg.model.fromUser, msg.model.text);
   }
 };
 
-function reply_to_user(user, message) {
-  const displayName = user.displayName;
-  const username = user.username;
-
-  if (message.startsWith(constants.BOT_MENTION_NAME)) {
-    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
-    console.log(parsedMessage);
-    const startsWithString = utils.getStartsWith(parsedMessage);
-    if (startsWithString === constants.BOT_ACTIONS.HELP) {
-      send(utils.generateBotHelp(), username);
-    }
-
-    if (startsWithString === constants.BOT_ACTIONS.JOKE) {
-      joker.getJoke(send, username);
-    }
-
-    if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
-      request({
-        url: constants.SERVER_DEPLOY_URL,
-        method: "GET"
-      }, (error, response, body) => {
-        console.log(response);
-      });
-    }
-
-    if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
-      const query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
-      request({
-        url: constants.SERVER_HOWDOI_PREFIX_URL + query,
-        method: "GET"
-      }, (error, response, body) => {
-        send(body);
-      });
-    }
-  }
-}
-
-function _postOnChat(message) {
-  request({
-    url: constants.CHATROOM_URL,
-    headers: {
-      Authorization : `Bearer ${constants.TOKEN}`
-    },
-    method: "POST",
-    json: true,
-    body: {
-      text: message
-    }
-  }, (error, response, body) => {
-    console.log(response);
-  });
-}
-
-function send(message, username) {
-  _postOnChat(username ? `@${username} ${message}` : message);
-}
-
 client.subscribe(`/api${constants.CHATROOM_SUFFIX_URL}`, messageHandler, {});
-
-// module.exports = {
-//   getStartsWith: _getStartsWith,
-//   getBotActions: () => (constants.BOT_ACTIONS)
-// };
