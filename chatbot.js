@@ -4,7 +4,7 @@ const request = require('request');
 const config = require('./config');
 const joker = require('./services/jokeService.js');
 const wiki = require('./services/wikiService');
-const weather = require('./services/weather');
+const weather = require('./services/weatherService');
 const places = require('./services/mapService');
 
 const ROOM_ID  = config.roomId;
@@ -101,8 +101,7 @@ function reply_to_user(user, message) {
   if (message.startsWith(BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(BOT_MENTION_NAME.length + 1);
     const startsWithString = _getStartsWith(parsedMessage);
-    const splitMessage = parsedMessage.split(' ').splice(1);
-    const cityName = `${splitMessage.join(' ')}`;
+    const cityName = parsedMessage.substr(parsedMessage.indexOf(' ')+1);
     if (startsWithString === BOT_ACTIONS.HELP) {
       send(_getBotHelp(), username);
     }
