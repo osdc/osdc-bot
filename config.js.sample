@@ -2,3 +2,5 @@ module.exports = {
   token: '',
   roomId: '',
 };
+
+module.exports = config;
