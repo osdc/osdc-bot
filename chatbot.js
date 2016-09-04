@@ -26,7 +26,7 @@ const BOT_ACTIONS = {
   JOKE: 'joke',
   DEPLOY: 'deploy',
   HOWDOI: 'howdoi',
-  WIKI : 'wiki'
+  WIKI : 'wiki',
   WEATHER: 'weather',
   PLACES: 'locate'
 };
