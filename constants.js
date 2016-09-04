@@ -12,6 +12,7 @@ const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const CHATROOM_SUFFIX_URL = `/v1/rooms/${ROOM_ID}/chatMessages`;
 const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
 const JOKES_API_URL = 'http://api.icndb.com/jokes/random';
+const CLIENT_SUBSCRIBE_URL = `/api${CHATROOM_SUFFIX_URL}`;
 
 const BOT_MENTION_NAME = "@osdc-bot";
 const BOT_ACTIONS = {
@@ -29,6 +30,7 @@ module.exports = {
   SERVER_HOWDOI_PREFIX_URL,
   CHATROOM_SUFFIX_URL,
   CHATROOM_URL,
+  CLIENT_SUBSCRIBE_URL,
   JOKES_API_URL,
   BOT_MENTION_NAME,
   BOT_ACTIONS,

@@ -12,16 +12,13 @@ const deployer = require('./services/deployService');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
-// Authentication extension
-let ClientAuthExt = function() {};
-
+// Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
   const displayName = user.displayName;
   const username = user.username;
 
   if (message.startsWith(constants.BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
-    console.log(parsedMessage);
     const startsWithString = utils.getStartsWith(parsedMessage);
 
     if (startsWithString === constants.BOT_ACTIONS.HELP) {
@@ -43,26 +40,30 @@ const replyToUser = (user, message) => {
   }
 };
 
-ClientAuthExt.prototype.outgoing = (message, callback) => {
-  if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
-    if (!message.ext) { message.ext = {}; }
-    message.ext.token = constants.TOKEN;
-  }
-  callback(message);
-};
+// Authentication extension
+let ClientAuthExt = function() {};
 
-ClientAuthExt.prototype.incoming = (message, callback) => {
-  if(message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
-    if(message.successful) {
-      console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
-      if (DEPLOY_FLAG) {
-        api.postBotReply("Deployment Successful");
-      }
-    } else {
-      console.log('Something went wrong: ', message.error);
+ClientAuthExt.prototype = {
+  outgoing: (message, callback) => {
+    if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
+      if (!message.ext) { message.ext = {}; }
+      message.ext.token = constants.TOKEN;
     }
+    callback(message);
+  },
+  incoming: (message, callback) => {
+    if(message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
+      if(message.successful) {
+        console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
+        if (DEPLOY_FLAG) {
+          api.postBotReply("Deployment Successful");
+        }
+      } else {
+        console.log('Something went wrong: ', message.error);
+      }
+    }
+    callback(message);
   }
-  callback(message);
 };
 
 // Faye client
@@ -74,15 +75,11 @@ const client = new Faye.Client(constants.FAYE_CLIENT_URL, {
 
 // Add Client Authentication extension
 client.addExtension(new ClientAuthExt());
-
-// A dummy handler to echo incoming messages
-const messageHandler = (msg) => {
+client.subscribe(constants.CLIENT_SUBSCRIBE_URL, (msg) => {
   if (msg.model && msg.model.fromUser) {
     console.log("Message: ", msg.model.text);
     console.log("From: ", msg.model.fromUser.displayName);
 
     replyToUser(msg.model.fromUser, msg.model.text);
   }
-};
-
-client.subscribe(`/api${constants.CHATROOM_SUFFIX_URL}`, messageHandler, {});
+}, {});
