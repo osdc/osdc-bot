@@ -3,7 +3,7 @@ const request = require('request');
 
 const config = require('./config');
 const joker = require('./services/jokeService.js');
-
+const wiki = require('./services/wikiService');
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
 
@@ -17,12 +17,13 @@ const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const CHATROOM_SUFFIX_URL = `/v1/rooms/${ROOM_ID}/chatMessages`;
 const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
 
-const BOT_MENTION_NAME = "@osdc-bot";
+const BOT_MENTION_NAME = '@osdc-bot';
 const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',
   DEPLOY: 'deploy',
-  HOWDOI: 'howdoi'
+  HOWDOI: 'howdoi',
+  WIKI : 'wiki'
 };
 
 // Authentication extension
@@ -125,6 +126,10 @@ function reply_to_user(user, message) {
         console.log(body);
         send(body);
       });
+    }
+    if (startsWithString === BOT_ACTIONS.WIKI) {
+      var requestedData = parsedMessage.slice(5, parsedMessage.length);
+      wiki(send, username, requestedData);
     }
   }
 }
