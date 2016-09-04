@@ -1,6 +1,6 @@
 {
   "name": "osdc-bot",
-  "version": "0.5",
+  "version": "0.0.1",
   "description": "Fun-loving faye bot residing at https://gitter.im/osdc/Hackers",
   "main": "node chatbot.js",
   "scripts": {
