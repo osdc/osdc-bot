@@ -3,9 +3,11 @@ const request = require('request');
 
 const config = require('./config');
 const joker = require('./services/jokeService.js');
+
 const wiki = require('./services/wikiService');
 const weather = require('./services/weatherService');
 const places = require('./services/mapService');
+const quotation = require('./services/quoteService.js')
 
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
@@ -28,7 +30,8 @@ const BOT_ACTIONS = {
   HOWDOI: 'howdoi',
   WIKI : 'wiki',
   WEATHER: 'weather',
-  PLACES: 'locate'
+  PLACES: 'locate',
+  QUOTE: 'quote'
 };
 
 // Authentication extension
@@ -106,6 +109,9 @@ function reply_to_user(user, message) {
     if (startsWithString === BOT_ACTIONS.HELP) {
       send(_getBotHelp(), username);
     }
+    if (startsWithString === BOT_ACTIONS.QUOTE){
+        quotation.getQuote(send, username);
+        }
 
     if (startsWithString === BOT_ACTIONS.JOKE) {
       joker.getJoke(send, username);
