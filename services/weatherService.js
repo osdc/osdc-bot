@@ -1,8 +1,8 @@
 const request = require('request');
 
 module.exports = {
-  getWeather: (callback, username, city_name) => {
-    const encodedCityName = encodeURIComponent(city_name);
+  getWeather: (callback, username, cityname) => {
+    const encodedCityName = encodeURIComponent(cityname);
     const WEATHER_API_URL = `http://api.openweathermap.org/data/2.5/weather?q=${encodedCityName}&APPID=5ce8ec77d11e6b31bbca4a128afd3b6d`;
     
     request(WEATHER_API_URL, (error, response, body) => {
