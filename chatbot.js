@@ -11,6 +11,7 @@ const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
+const TEST_FLAG = process.env.TEST || false;
 
 const META_HANDSHAKE_SUFFIX_URL = '/meta/handshake';
 const FAYE_CLIENT_URL = 'https://ws.gitter.im/faye';
@@ -19,6 +20,15 @@ const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
 const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const CHATROOM_SUFFIX_URL = `/v1/rooms/${ROOM_ID}/chatMessages`;
 const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
+
+// Sorry avijit
+var readline = require('readline');
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+
 
 const BOT_MENTION_NAME = '@osdc-bot';
 const BOT_ACTIONS = {
@@ -64,7 +74,9 @@ const client = new Faye.Client(FAYE_CLIENT_URL, {
 });
 
 // Add Client Authentication extension
-client.addExtension(new ClientAuthExt());
+if (!TEST_FLAG) {
+  client.addExtension(new ClientAuthExt());
+}
 
 // A dummy handler to echo incoming messages
 const messageHandler = (msg) => {
@@ -160,7 +172,21 @@ function _postOnChat(message) {
 }
 
 function send(message, username) {
-  _postOnChat(username ? `@${username} ${message}` : message);
+  if (!TEST_FLAG) {
+    _postOnChat(username ? `@${username} ${message}` : message);
+  } else {
+    console.log(message);
+  }
 }
 
-client.subscribe(`/api${CHATROOM_SUFFIX_URL}`, messageHandler, {});
+function read_from_stdin() {
+  rl.on('line', function(line){
+    reply_to_user("yash" ,line);
+  })
+}
+
+if (!TEST_FLAG) {
+  client.subscribe(`/api${CHATROOM_SUFFIX_URL}`, messageHandler, {});
+} else {
+  read_from_stdin()
+}
