@@ -125,6 +125,7 @@ function reply_to_user(user, message) {
         url: SERVER_DEPLOY_URL,
         method: "GET"
       }, (error, response, body) => {
+        send(body);
       });
     }
 
