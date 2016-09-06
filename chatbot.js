@@ -1,66 +1,81 @@
+'use strict';
 const Faye = require('faye');
 const request = require('request');
 
-const config = require('./config');
-const joker = require('./services/jokeService.js');
+const constants = require('./constants');
+const utils = require('./utils');
+const api = require('./api');
 
+const joker = require('./services/jokeService');
+const howdoi = require('./services/howdoiService');
+const deployer = require('./services/deployService');
 const wiki = require('./services/wikiService');
 const weather = require('./services/weatherService');
 const places = require('./services/mapService');
-const quotation = require('./services/quoteService.js')
-
-const ROOM_ID  = config.roomId;
-const TOKEN   = config.token;
+const quotation = require('./services/quoteService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
-const META_HANDSHAKE_SUFFIX_URL = '/meta/handshake';
-const FAYE_CLIENT_URL = 'https://ws.gitter.im/faye';
-const SERVER_PREFIX_URL = "http://127.0.0.1:5000";
-const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
-const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
-const CHATROOM_SUFFIX_URL = `/v1/rooms/${ROOM_ID}/chatMessages`;
-const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
+// Main function which handles the user input and decides what needs to be done.
+const replyToUser = (user, message) => {
+  const displayName = user.displayName;
+  const username = user.username;
 
-const BOT_MENTION_NAME = '@osdc-bot';
-const BOT_ACTIONS = {
-  HELP: 'help',
-  JOKE: 'joke',
-  DEPLOY: 'deploy',
-  HOWDOI: 'howdoi',
-  WIKI : 'wiki',
-  WEATHER: 'weather',
-  PLACES: 'locate',
-  QUOTE: 'quote'
+  if (message.startsWith(constants.BOT_MENTION_NAME)) {
+    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
+    const startsWithString = utils.getStartsWith(parsedMessage);
+    const cityName = parsedMessage.substr(parsedMessage.indexOf(' ') + 1);
+
+    if (startsWithString === constants.BOT_ACTIONS.HELP) {
+      api.postBotReply(utils.generateBotHelp(), username);
+    } else if (startsWithString === constants.BOT_ACTIONS.JOKE) {
+      joker.getJoke(api.postBotReply, username);
+    } else if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
+      deployer.deployToProd();
+    } else if (startsWithString === constants.BOT_ACTIONS.QUOTE){
+      quotation.getQuote(api.postBotReply, username);
+    } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
+      const query = encodeURIComponent(parsedMessage.slice(7));
+      howdoi.getHowdoiResult(api.postBotReply, query);
+    } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
+      var requestedData = parsedMessage.slice(5, parsedMessage.length);
+      wiki(api.postBotReply, username, requestedData);
+    } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
+      weather.getWeather(api.postBotReply, username, cityName);
+    } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
+      places.getPlaces(api.postBotReply, username, cityName);
+    }
+  }
 };
 
 // Authentication extension
-var ClientAuthExt = function() {};
+let ClientAuthExt = function() {};
 
-ClientAuthExt.prototype.outgoing = (message, callback) => {
-  if (message.channel === META_HANDSHAKE_SUFFIX_URL) {
-    if (!message.ext) { message.ext = {}; }
-    message.ext.token = TOKEN;
-  }
-  callback(message);
-};
-
-ClientAuthExt.prototype.incoming = (message, callback) => {
-  if(message.channel === META_HANDSHAKE_SUFFIX_URL) {
-    if(message.successful) {
-      console.log('Successfuly subscribed to room: ', ROOM_ID);
-      if (DEPLOY_FLAG) {
-        send("Deployment Successful");
-      }
-    } else {
-      console.log('Something went wrong: ', message.error);
+ClientAuthExt.prototype = {
+  outgoing: (message, callback) => {
+    if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
+      if (!message.ext) { message.ext = {}; }
+      message.ext.token = constants.TOKEN;
     }
+    callback(message);
+  },
+  incoming: (message, callback) => {
+    if(message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
+      if(message.successful) {
+        console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
+        if (DEPLOY_FLAG) {
+          api.postBotReply("Deployment Successful");
+        }
+      } else {
+        console.log('Something went wrong: ', message.error);
+      }
+    }
+    callback(message);
   }
-  callback(message);
 };
 
 // Faye client
-const client = new Faye.Client(FAYE_CLIENT_URL, {
+const client = new Faye.Client(constants.FAYE_CLIENT_URL, {
   timeout: 60,
   retry: 5,
   interval: 1
@@ -68,109 +83,11 @@ const client = new Faye.Client(FAYE_CLIENT_URL, {
 
 // Add Client Authentication extension
 client.addExtension(new ClientAuthExt());
-
-// A dummy handler to echo incoming messages
-const messageHandler = (msg) => {
+client.subscribe(constants.CLIENT_SUBSCRIBE_URL, (msg) => {
   if (msg.model && msg.model.fromUser) {
     console.log("Message: ", msg.model.text);
     console.log("From: ", msg.model.fromUser.displayName);
 
-    reply_to_user(msg.model.fromUser, msg.model.text);
+    replyToUser(msg.model.fromUser, msg.model.text);
   }
-};
-
-function _getStartsWith(parsedMessage) {
-  var result = null;
-  for (var botAction in BOT_ACTIONS) {
-    if (parsedMessage.startsWith(BOT_ACTIONS[botAction])) {
-      result = BOT_ACTIONS[botAction];
-      console.log(`[INFO] In loop ${result}`);
-      break;
-    }
-  }
-  return result;
-}
-
-function _getBotHelp() {
-  var resultString = "You can:";
-  for (var botAction in BOT_ACTIONS) {
-    resultString += `\n- ${BOT_ACTIONS[botAction]}`;
-  }
-  return resultString;
-}
-
-function reply_to_user(user, message) {
-  const displayName = user.displayName;
-  const username = user.username;
-
-  if (message.startsWith(BOT_MENTION_NAME)) {
-    const parsedMessage = message.slice(BOT_MENTION_NAME.length + 1);
-    const startsWithString = _getStartsWith(parsedMessage);
-    const cityName = parsedMessage.substr(parsedMessage.indexOf(' ')+1);
-
-    if (startsWithString === BOT_ACTIONS.HELP) {
-      send(_getBotHelp(), username);
-    }
-
-    if (startsWithString === BOT_ACTIONS.QUOTE){
-      quotation.getQuote(send, username);
-    }
-
-    if (startsWithString === BOT_ACTIONS.JOKE) {
-      joker.getJoke(send, username);
-    }
-
-    if (startsWithString === BOT_ACTIONS.DEPLOY) {
-      request({
-        url: SERVER_DEPLOY_URL,
-        method: "GET"
-      }, (error, response, body) => {
-        send(body);
-      });
-    }
-
-    if (startsWithString === BOT_ACTIONS.HOWDOI) {
-      var query = encodeURIComponent(parsedMessage.slice(7, parsedMessage.length));
-      request({
-        url: SERVER_HOWDOI_PREFIX_URL + query,
-        method: "GET"
-      }, (error, response, body) => {
-        send(body);
-      });
-    }
-
-    if (startsWithString === BOT_ACTIONS.WIKI) {
-      var requestedData = parsedMessage.slice(5, parsedMessage.length);
-      wiki(send, username, requestedData);
-    }
-
-    if (startsWithString === BOT_ACTIONS.WEATHER) {
-      weather.getWeather(send, username, cityName);
-    }
-
-    if (startsWithString === BOT_ACTIONS.PLACES) {
-      places.getPlaces(send, username, cityName);
-    }
-  }
-}
-
-function _postOnChat(message) {
-  request({
-    url: CHATROOM_URL,
-    headers: {
-      Authorization : `Bearer ${TOKEN}`
-    },
-    method: "POST",
-    json: true,
-    body: {
-      text: message
-    }
-  }, (error, response, body) => {
-  });
-}
-
-function send(message, username) {
-  _postOnChat(username ? `@${username} ${message}` : message);
-}
-
-client.subscribe(`/api${CHATROOM_SUFFIX_URL}`, messageHandler, {});
+}, {});

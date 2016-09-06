@@ -1,15 +1,17 @@
 {
-  "name": "faye-client",
+  "name": "osdc-bot",
   "version": "0.0.1",
-  "description": "Node example client for the Gitter Faye API",
-  "main": "faye-client.js",
+  "description": "Fun-loving faye bot residing at https://gitter.im/osdc/Hackers",
+  "main": "node chatbot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
-  "author": "@malditogeek",
+  "author": "osdc",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "chai": "^3.5.0",
     "faye": "~1.0.1",
+    "mocha": "^3.0.2",
     "request": "^2.74.0"
   }
 }

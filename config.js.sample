@@ -1,6 +1,4 @@
-var config = {
-  'token': '',
-  'roomId': '',
-}
-
-module.exports = config;
+module.exports = {
+  token: '',
+  roomId: '',
+};
