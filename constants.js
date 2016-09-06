@@ -9,7 +9,11 @@ const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',
   DEPLOY: 'deploy',
-  HOWDOI: 'howdoi'
+  QUOTE: 'quote',
+  HOWDOI: 'howdoi',
+  WIKI: 'wiki',
+  WEATHER: 'weather',
+  PLACES: 'locate'
 };
 
 const META_HANDSHAKE_SUFFIX_URL = '/meta/handshake';

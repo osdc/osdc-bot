@@ -9,6 +9,10 @@ const api = require('./api');
 const joker = require('./services/jokeService');
 const howdoi = require('./services/howdoiService');
 const deployer = require('./services/deployService');
+const wiki = require('./services/wikiService');
+const weather = require('./services/weatherService');
+const places = require('./services/mapService');
+const quotation = require('./services/quoteService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
@@ -20,22 +24,26 @@ const replyToUser = (user, message) => {
   if (message.startsWith(constants.BOT_MENTION_NAME)) {
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
     const startsWithString = utils.getStartsWith(parsedMessage);
+    const cityName = parsedMessage.substr(parsedMessage.indexOf(' ') + 1);
 
     if (startsWithString === constants.BOT_ACTIONS.HELP) {
       api.postBotReply(utils.generateBotHelp(), username);
-    }
-
-    if (startsWithString === constants.BOT_ACTIONS.JOKE) {
+    } else if (startsWithString === constants.BOT_ACTIONS.JOKE) {
       joker.getJoke(api.postBotReply, username);
-    }
-
-    if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
+    } else if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
       deployer.deployToProd();
-    }
-
-    if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
+    } else if (startsWithString === constants.BOT_ACTIONS.QUOTE){
+      quotation.getQuote(api.postBotReply, username);
+    } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
       const query = encodeURIComponent(parsedMessage.slice(7));
       howdoi.getHowdoiResult(api.postBotReply, query);
+    } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
+      var requestedData = parsedMessage.slice(5, parsedMessage.length);
+      wiki(api.postBotReply, username, requestedData);
+    } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
+      weather.getWeather(api.postBotReply, username, cityName);
+    } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
+      places.getPlaces(api.postBotReply, username, cityName);
     }
   }
 };
