@@ -34,9 +34,11 @@ const replyToUser = (user, message) => {
     } else if (startsWithString === constants.BOT_ACTIONS.QUOTE){
       quotation.getQuote(api.postBotReply, username);
     } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
-      howdoi.getHowdoiResult(api.postBotReply, encodeURIComponent(parsedMessage.slice(7)));
+      howdoi.getHowdoiResult(
+        api.postBotReply, encodeURIComponent(parsedMessage.slice(7)));
     } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
-      wiki(api.postBotReply, username, parsedMessage.slice(5, parsedMessage.length));
+      wiki(
+        api.postBotReply, username, parsedMessage.slice(5));
     } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
       weather.getWeather(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {

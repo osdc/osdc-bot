@@ -32,6 +32,7 @@ const WEATHER_API_PREFIX_URL = `http://api.openweathermap.org/data/2.5/weather?A
 const QUOTES_API_URL = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
 const WIKI_API_PREFIX_URL = 'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
 const WIKI_ARTICLE_PREFIX_URL = 'https://en.wikipedia.org/?curid=';
+const KELVIN_CELCIUS_OFFSET = 273;
 
 
 module.exports = {
@@ -52,5 +53,6 @@ module.exports = {
   QUOTES_API_URL,
   WEATHER_API_PREFIX_URL,
   WIKI_API_PREFIX_URL,
-  WIKI_ARTICLE_PREFIX_URL
+  WIKI_ARTICLE_PREFIX_URL,
+  KELVIN_CELCIUS_OFFSET
 };

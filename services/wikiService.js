@@ -14,16 +14,15 @@ module.exports = (callback, username, input) => {
       if (data.query) {
         for(let key in data.query.pages) {
           if (data.query.pages.hasOwnProperty(key)) {
-            dataArr[data.query.pages[key].index - 1] = data.query.pages[key]; //counting sort .
+            dataArr[data.query.pages[key].index - 1] = data.query.pages[key]; // counting sort.
           }
         }
       }
       dataArr.forEach((curr, index) => {
-        result += `\n#### ${index + 1}. [${curr.title}](${constants.WIKI_ARTICLE_PREFIX_URL}${curr.pageid})\n${curr.extract}\n`;
+        result += `\n#### ${index + 1}. [${curr.title}](${constants.WIKI_ARTICLE_PREFIX_URL}${curr.pageid})\n${curr.extract}\n`; // eslint-disable-line max-len
       });
       callback(result, username);
-    }
-    else {
+    } else {
       callback(err ? err.message : 'Unable to Connect to Wikipedia', username);
     }
   });
