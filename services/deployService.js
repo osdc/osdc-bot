@@ -6,7 +6,7 @@ module.exports = {
   deployToProd: () => {
     request({
       url: constants.SERVER_DEPLOY_URL,
-      method: "GET"
+      method: 'GET'
     });
   }
 };

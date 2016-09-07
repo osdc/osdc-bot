@@ -1,4 +1,5 @@
 'use strict';
+/* eslint-disable no-console */
 const Faye = require('faye');
 
 const constants = require('./constants');
@@ -60,7 +61,7 @@ ClientAuthExt.prototype = {
       if(message.successful) {
         console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
         if (DEPLOY_FLAG) {
-          api.postBotReply("Deployment Successful");
+          api.postBotReply('Deployment Successful');
         }
       } else {
         console.log('Something went wrong: ', message.error);
@@ -81,8 +82,8 @@ const client = new Faye.Client(constants.FAYE_CLIENT_URL, {
 client.addExtension(new ClientAuthExt());
 client.subscribe(constants.CLIENT_SUBSCRIBE_URL, (msg) => {
   if (msg.model && msg.model.fromUser) {
-    console.log("Message: ", msg.model.text);
-    console.log("From: ", msg.model.fromUser.displayName);
+    console.log('Message: ', msg.model.text);
+    console.log('From: ', msg.model.fromUser.displayName);
 
     replyToUser(msg.model.fromUser, msg.model.text);
   }
