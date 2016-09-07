@@ -28,6 +28,8 @@ const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const JOKES_API_URL = 'http://api.icndb.com/jokes/random';
 const DEFINE_API_URL = 'https://mashape-community-urban-dictionary.p.mashape.com/define';
 
+const DEFINE_API_KEY = "MRn5Ke2MMTmshHp839whoCom3Nx2p1Fsdo5jsnBBhSTxU3Zdo2";
+
 module.exports = {
   BOT_MENTION_NAME,
   BOT_ACTIONS,
