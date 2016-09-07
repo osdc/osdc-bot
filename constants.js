@@ -4,7 +4,7 @@ const config = require('./config');
 const ROOM_ID  = config.roomId;
 const TOKEN   = config.token;
 
-const BOT_MENTION_NAME = "@osdc-bot";
+const BOT_MENTION_NAME = "@bot-test";
 const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',
@@ -25,6 +25,11 @@ const SERVER_PREFIX_URL = "http://127.0.0.1:5000";
 const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
 const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const JOKES_API_URL = 'http://api.icndb.com/jokes/random';
+const PLACES_API_KEY = 'AIzaSyC25RQflehd0mWD6mTTxWs_AcH6Gq1o4Q8';
+const PLACES_API_PREFIX_URL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?types=establishment&key=${PLACES_API_KEY}&input=`;
+const WEATHER_API_KEY = '5ce8ec77d11e6b31bbca4a128afd3b6d';
+const WEATHER_API_PREFIX_URL = `http://api.openweathermap.org/data/2.5/weather?APPID=${WEATHER_API_KEY}&q=`;
+const QUOTES_API_URL = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
 
 module.exports = {
   BOT_MENTION_NAME,
@@ -39,5 +44,8 @@ module.exports = {
   SERVER_PREFIX_URL,
   SERVER_DEPLOY_URL,
   SERVER_HOWDOI_PREFIX_URL,
-  JOKES_API_URL
+  JOKES_API_URL,
+  PLACES_API_PREFIX_URL,
+  QUOTES_API_URL,
+  WEATHER_API_PREFIX_URL
 };

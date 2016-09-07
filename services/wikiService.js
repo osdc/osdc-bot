@@ -12,9 +12,10 @@ module.exports = (callback, username, input) => {
     if (!err && response.statusCode === 200){
       let result = '', dataArr = [];
       if (data.query) {
-        for(let key in data.query.pages){
-          if (data.query.pages.hasOwnProperty(key))
+        for(let key in data.query.pages) {
+          if (data.query.pages.hasOwnProperty(key)) {
             dataArr[data.query.pages[key].index - 1] = data.query.pages[key]; //counting sort .
+          }
         }
       }
       dataArr.forEach((curr, index) => {

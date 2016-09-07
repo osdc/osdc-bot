@@ -9,9 +9,12 @@
   "author": "osdc",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "chai": "^3.5.0",
     "faye": "~1.0.1",
-    "mocha": "^3.0.2",
     "request": "^2.74.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jshint": "^2.9.3",
+    "mocha": "^3.0.2"
   }
 }
