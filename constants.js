@@ -30,6 +30,9 @@ const PLACES_API_PREFIX_URL = `https://maps.googleapis.com/maps/api/place/autoco
 const WEATHER_API_KEY = '5ce8ec77d11e6b31bbca4a128afd3b6d';
 const WEATHER_API_PREFIX_URL = `http://api.openweathermap.org/data/2.5/weather?APPID=${WEATHER_API_KEY}&q=`;
 const QUOTES_API_URL = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
+const WIKI_API_PREFIX_URL = 'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
+const WIKI_ARTICLE_PREFIX_URL = 'https://en.wikipedia.org/?curid=';
+
 
 module.exports = {
   BOT_MENTION_NAME,
@@ -47,5 +50,7 @@ module.exports = {
   JOKES_API_URL,
   PLACES_API_PREFIX_URL,
   QUOTES_API_URL,
-  WEATHER_API_PREFIX_URL
+  WEATHER_API_PREFIX_URL,
+  WIKI_API_PREFIX_URL,
+  WIKI_ARTICLE_PREFIX_URL
 };
