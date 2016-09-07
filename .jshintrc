@@ -2,5 +2,7 @@
   "esversion": 6,
   "node": true,
   "curly": true,
-  "eqeqeq": true
+  "eqeqeq": true,
+  "freeze": true,
+  "varstmt": true
 }
