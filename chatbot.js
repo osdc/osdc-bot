@@ -1,6 +1,5 @@
 'use strict';
 const Faye = require('faye');
-const request = require('request');
 
 const constants = require('./constants');
 const utils = require('./utils');
@@ -18,7 +17,6 @@ const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
-  const displayName = user.displayName;
   const username = user.username;
 
   if (message.startsWith(constants.BOT_MENTION_NAME)) {
