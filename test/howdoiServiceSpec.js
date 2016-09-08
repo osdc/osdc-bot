@@ -24,13 +24,13 @@ describe('Module howdoiService', () => {
   });
 
   // TODO: Check why this is failing.
-  it('should check for the callback', () => {
-    const QUERY = 'declare array in python';
-    // const callback = (data) => {
-    //   expect(data).to.exist;
-    //   done();
-    // };
-    // const spy = chai.spy(callback);
-    // howdoiService.getHowdoiResult(spy, QUERY);
+  it('should check for the callback', (done) => {
+    const QUERY_ENCODED = encodeURIComponent('declare array python');
+    const callback = (data) => {
+      expect(data).to.exist;
+      done();
+    };
+    const spy = chai.spy(callback);
+    howdoiService.getHowdoiResult(spy, QUERY_ENCODED);
   });
 });
