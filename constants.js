@@ -13,7 +13,8 @@ const BOT_ACTIONS = {
   HOWDOI: 'howdoi',
   WIKI: 'wiki',
   WEATHER: 'weather',
-  PLACES: 'locate'
+  PLACES: 'locate',
+  DEFINE: 'define'
 };
 
 const META_HANDSHAKE_SUFFIX_URL = '/meta/handshake';
@@ -25,6 +26,9 @@ const SERVER_PREFIX_URL = "http://127.0.0.1:5000";
 const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
 const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const JOKES_API_URL = 'http://api.icndb.com/jokes/random';
+const DEFINE_API_URL = 'https://mashape-community-urban-dictionary.p.mashape.com/define';
+
+const DEFINE_API_KEY = "MRn5Ke2MMTmshHp839whoCom3Nx2p1Fsdo5jsnBBhSTxU3Zdo2";
 
 module.exports = {
   BOT_MENTION_NAME,
@@ -39,5 +43,7 @@ module.exports = {
   SERVER_PREFIX_URL,
   SERVER_DEPLOY_URL,
   SERVER_HOWDOI_PREFIX_URL,
-  JOKES_API_URL
+  JOKES_API_URL,
+  DEFINE_API_URL,
+  DEFINE_API_KEY
 };
