@@ -4,6 +4,7 @@ const constants = require('../constants');
 
 module.exports = {
   define: (callback, username, term) => {
+    console.log(`${constants.DEFINE_API_URL}?term=${term}`);
     request({
       url: `${constants.DEFINE_API_URL}?term=${term}`,
       headers: {
@@ -12,14 +13,13 @@ module.exports = {
       method: "GET"
     }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
+        console.log(response.data);
         let message = "\n";
         const body = JSON.parse(body);
-        for(let i = 0; i < body.list.length; i++) {
-          message += '* ' + body.list[i].definition + '\n';
-          message += 'by *' + body.list[i].author + '* ';
-          message += ' :thumbsup: ' + body.list[i].thumbs_up.toString() + ' ';
-          message += ' :thumbsdown: ' + body.list[i].thumbs_down.toString() + '\n';
-        }
+        body.list.forEach(function(listItem) {
+          message += `* ${listItem.definition}\n by *${listItem.author}*  `
+          message += `:thumbsup: ${listItem.thumbs_up.toString()} :thumbsdown: ${listItem.thumbs_down.toString()}\n`;
+        });
         return callback(message, username);
       }
     });
