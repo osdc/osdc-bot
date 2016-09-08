@@ -36,10 +36,14 @@ const replyToUser = (user, message) => {
       quotation.getQuote(api.postBotReply, username);
     } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
       howdoi.getHowdoiResult(
-        api.postBotReply, encodeURIComponent(parsedMessage.slice(7)));
+        api.postBotReply,
+        encodeURIComponent(
+          parsedMessage.slice(constants.BOT_ACTIONS.HOWDOI.length + 1)));
     } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
       wiki(
-        api.postBotReply, username, parsedMessage.slice(5));
+        api.postBotReply,
+        username,
+        parsedMessage.slice(constants.BOT_ACTIONS.WIKI.length + 1));
     } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
       weather.getWeather(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {

@@ -1,8 +1,8 @@
 'use strict';
 const config = require('./config');
 
-const ROOM_ID  = config.roomId;
-const TOKEN   = config.token;
+const ROOM_ID = config.roomId;
+const TOKEN = config.token;
 
 const BOT_MENTION_NAME = '@bot-test';
 const BOT_ACTIONS = {

@@ -1,3 +1,4 @@
+'use strict';
 const request = require('request');
 const constants = require('../constants');
 
@@ -8,15 +9,16 @@ module.exports = {
       (error, response, body) => {
         if (!error && response.statusCode === 200) {
           const weatherData = JSON.parse(body);
+          let message = `Humidity: ${weatherData.main.humidity}%\n`;
           const maxTempCelcius = (
             (weatherData.main.temp_max - constants.KELVIN_CELCIUS_OFFSET)
               .toFixed(2));
           const minTempCelcius = (
             (weatherData.main.temp_min - constants.KELVIN_CELCIUS_OFFSET)
               .toFixed(2));
-          return callback(
-            `Humidity: ${weatherData.main.humidity}%\nMax Temperature: ${maxTempCelcius}C\nMin Temperature: ${minTempCelcius}C`, // eslint-disable-line max-len
-            username);
+          message += `Max Temperature: ${maxTempCelcius}C`;
+          message += `\nMin Temperature: ${minTempCelcius}C`;
+          return callback(message, username);
         }
       }
     );
