@@ -13,6 +13,7 @@ const wiki = require('./services/wikiService');
 const weather = require('./services/weatherService');
 const places = require('./services/mapService');
 const quotation = require('./services/quoteService.js');
+const define = require('./services/defineService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
@@ -43,6 +44,8 @@ const replyToUser = (user, message) => {
       weather.getWeather(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
       places.getPlaces(api.postBotReply, username, cityName);
+    } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
+      define.define(api.postBotReply, username, cityName);
     }
   }
 };
