@@ -8,7 +8,7 @@ const _postBotReply = (message, username) => {
     headers: {
       Authorization : `Bearer ${constants.TOKEN}`
     },
-    method: "POST",
+    method: 'POST',
     json: true,
     body: {
       text: (username ? `@${username} ${message}` : message)

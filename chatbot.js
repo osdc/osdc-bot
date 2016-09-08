@@ -1,6 +1,6 @@
 'use strict';
+/* eslint-disable no-console */
 const Faye = require('faye');
-const request = require('request');
 
 const constants = require('./constants');
 const utils = require('./utils');
@@ -19,7 +19,6 @@ const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
-  const displayName = user.displayName;
   const username = user.username;
 
   if (message.startsWith(constants.BOT_MENTION_NAME)) {
@@ -36,11 +35,15 @@ const replyToUser = (user, message) => {
     } else if (startsWithString === constants.BOT_ACTIONS.QUOTE){
       quotation.getQuote(api.postBotReply, username);
     } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
-      const query = encodeURIComponent(parsedMessage.slice(7));
-      howdoi.getHowdoiResult(api.postBotReply, query);
+      howdoi.getHowdoiResult(
+        api.postBotReply,
+        encodeURIComponent(
+          parsedMessage.slice(constants.BOT_ACTIONS.HOWDOI.length + 1)));
     } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
-      var requestedData = parsedMessage.slice(5, parsedMessage.length);
-      wiki(api.postBotReply, username, requestedData);
+      wiki(
+        api.postBotReply,
+        username,
+        parsedMessage.slice(constants.BOT_ACTIONS.WIKI.length + 1));
     } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
       weather.getWeather(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
@@ -67,7 +70,7 @@ ClientAuthExt.prototype = {
       if(message.successful) {
         console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
         if (DEPLOY_FLAG) {
-          api.postBotReply("Deployment Successful");
+          api.postBotReply('Deployment Successful');
         }
       } else {
         console.log('Something went wrong: ', message.error);
@@ -88,8 +91,8 @@ const client = new Faye.Client(constants.FAYE_CLIENT_URL, {
 client.addExtension(new ClientAuthExt());
 client.subscribe(constants.CLIENT_SUBSCRIBE_URL, (msg) => {
   if (msg.model && msg.model.fromUser) {
-    console.log("Message: ", msg.model.text);
-    console.log("From: ", msg.model.fromUser.displayName);
+    console.log('Message: ', msg.model.text);
+    console.log('From: ', msg.model.fromUser.displayName);
 
     replyToUser(msg.model.fromUser, msg.model.text);
   }

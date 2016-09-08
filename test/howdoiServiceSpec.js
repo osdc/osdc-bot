@@ -1,11 +1,15 @@
 'use strict';
-const expect = require("chai").expect;
-const request = require("request");
+const chai = require('chai');
+const expect = require('chai').expect;
+const spies = require('chai-spies');
+const request = require('request');
 const constants = require('../constants');
 const howdoiService = require('../services/howdoiService');
 
-describe("Module howdoiService", function() {
-  it("should correctly call the howdoi service api", () => {
+describe('Module howdoiService', () => {
+  chai.use(spies);
+
+  it('should correctly call the howdoi service api', () => {
     const sampleQueries = [
       'howdoi convert mp4 to mp3',
       'howdoi declare array in python',
