@@ -14,7 +14,8 @@ const BOT_ACTIONS = {
   WIKI: 'wiki',
   WEATHER: 'weather',
   PLACES: 'locate',
-  DEFINE: 'define'
+  DEFINE: 'define',
+  KARMA: 'karma'
 };
 
 const META_HANDSHAKE_SUFFIX_URL = '/meta/handshake';
