@@ -21,7 +21,7 @@ const _getUserKarma = (username, callback, message) => {
 module.exports = {
   getKarma: (callback) => {
     let userKarmaMapping = {};
-    db.all("SELECT SUM(point) as totalKarma, username FROM karma GROUP BY username",
+    db.all("SELECT SUM(point) as totalKarma, username FROM karma GROUP BY username ORDER BY totalKarma DESC",
       (err, rows) => {
         _parseAllUserKarma(callback, rows);
     });
