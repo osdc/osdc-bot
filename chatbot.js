@@ -54,10 +54,11 @@ const replyToUser = (user, message) => {
     } else if (startsWithString === constants.BOT_ACTIONS.KARMA) {
       const msgBody = parsedMessage.split(' ');
       const karmaUser = msgBody[1];
-      const karmaVal = msgBody[2];
-      if (karmaVal === "++") {
+      if (karmaUser === "all") {
+        karma.getKarma(api.postBotReply);
+      } else if (msgBody[2] === "++") {
         karma.giveKarma(api.postBotReply, karmaUser, 1);
-      } else if (karmaVal === "--") {
+      } else if (msgBody[2] === "--") {
         karma.giveKarma(api.postBotReply, karmaUser, -1);
       }
     }
