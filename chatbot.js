@@ -14,6 +14,7 @@ const weather = require('./services/weatherService');
 const places = require('./services/mapService');
 const quotation = require('./services/quoteService.js');
 const define = require('./services/defineService.js');
+const karma = require('./services/karmaService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY || false;
 
@@ -50,6 +51,16 @@ const replyToUser = (user, message) => {
       places.getPlaces(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
       define.define(api.postBotReply, username, cityName);
+    } else if (startsWithString === constants.BOT_ACTIONS.KARMA) {
+      const msgBody = parsedMessage.split(' ');
+      const karmaUser = msgBody[1];
+      if (karmaUser === "all") {
+        karma.getKarma(api.postBotReply);
+      } else if (msgBody[2] === "++") {
+        karma.giveKarma(api.postBotReply, karmaUser, 1);
+      } else if (msgBody[2] === "--") {
+        karma.giveKarma(api.postBotReply, karmaUser, -1);
+      }
     }
   }
 };
