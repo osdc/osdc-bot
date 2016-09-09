@@ -4,11 +4,11 @@ const config = require('../config');
 const db = new sqlite3.Database(config.dbFilePath);
 
 const _parseAllUserKarma = (callback, rows) => {
-  let msg = 'Karma Table: \n';
+  let message = 'Karma Table: \n';
   for (let row in rows) {
-    msg += `${rows[row].username}: ${rows[row].totalKarma}\n`;
+    message += `${rows[row].username}: ${rows[row].totalKarma}\n`;
   }
-  callback(msg);
+  callback(message);
 };
 
 const _getUserKarma = (username, callback, message) => {
@@ -24,7 +24,7 @@ const _getUserKarma = (username, callback, message) => {
 module.exports = {
   getKarma: (callback) => {
     db.all(
-      ('SELECT SUM(point) as totalKarma, username FROM karma' +
+      ('SELECT SUM(point) as totalKarma, username FROM karma ' +
        'GROUP BY username ORDER BY totalKarma DESC'),
       (error, rows) => {
         if (!error) {
@@ -33,7 +33,7 @@ module.exports = {
       });
   },
   giveKarma: (callback, username, value) => {
-    if ([-1, 1].indexOf(value) > -1) {
+    if (~[-1, 1].indexOf(value)) {
       // Insert into DB
       db.serialize(function() {
         db.run(
@@ -41,7 +41,7 @@ module.exports = {
            $username: username,
            $point: value
          });
-        let message = `Karma of ${username} is: `;
+        const message = `Karma of ${username} is: `;
         _getUserKarma(username, callback, message);
       });
     }
