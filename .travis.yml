@@ -1,9 +1,12 @@
 language: node_js
 
 node_js:
-  - "6"
-  - "5"
-  - "4"
+  - "node"
+
+notifications:
+  email:
+    - 526avijit@gmail.com
+    - yashmehrotra95@gmail.com
 
 env:
   matrix:
@@ -20,5 +23,5 @@ install:
   - wget https://gist.githubusercontent.com/526avijitgupta/8378031286d14e7911d12f66261ec9d3/raw/65f0443e58466ea633814124017d4f69c94c0bcd/config.js
 
 script:
-  - if [ $RUN_FRONTEND_UNIT_TESTS == 'true' ]; then npm test; fi
   - if [ $RUN_FRONTEND_LINT == 'true' ]; then ./node_modules/.bin/eslint ./**/*.js --quiet; fi
+  - if [ $RUN_FRONTEND_UNIT_TESTS == 'true' ]; then npm test; fi
