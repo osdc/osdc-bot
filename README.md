@@ -20,6 +20,6 @@ $ python server.py
 
 ### Testing:
 
-```
-npm test
-```
+Run code linter: `npm run-script lint`
+
+Run frontend tests: `npm run-script frontend_tests`
