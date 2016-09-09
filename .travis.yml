@@ -20,7 +20,7 @@ matrix:
 install:
   - npm install -g mocha
   - npm install
-  - wget https://gist.githubusercontent.com/526avijitgupta/8378031286d14e7911d12f66261ec9d3/raw/65f0443e58466ea633814124017d4f69c94c0bcd/config.js
+  - wget https://gist.githubusercontent.com/526avijitgupta/8378031286d14e7911d12f66261ec9d3/raw/1e0c4b93a0fa4b0e714112d7beca7b6f8f54c0e5/config.js
 
 script:
   - if [ $RUN_LINT == 'true' ]; then npm run-script lint; fi
