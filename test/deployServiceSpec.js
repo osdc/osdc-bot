@@ -8,6 +8,7 @@ describe('Module deployService', () => {
     request.get(constants.SERVER_DEPLOY_URL, (error, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.equal('Deployed');
+      expect(error).to.equal({});
     });
   });
 });

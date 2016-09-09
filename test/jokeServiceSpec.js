@@ -13,6 +13,7 @@ describe('Module jokeService', () => {
     request.get(constants.JOKES_API_URL, (error, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(JSON.parse(body).value).to.have.property('joke');
+      expect(error).to.equal({});
     });
   });
 
@@ -20,7 +21,7 @@ describe('Module jokeService', () => {
     const USERNAME = 'username';
     const callback = (joke, username) => {
       expect(username).to.equal(USERNAME);
-      expect(joke).to.exist;
+      expect(joke).to.be.a('string');
       done();
     };
     const spy = chai.spy(callback);

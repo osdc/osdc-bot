@@ -4,7 +4,8 @@
   "description": "Fun-loving faye bot residing at https://gitter.im/osdc/Hackers",
   "main": "node chatbot.js",
   "scripts": {
-    "test": "mocha"
+    "lint": "((./node_modules/.bin/eslint ./**/*.js --quiet ; find . -path ./node_modules -prune -o -name '*.js' -print | xargs ./node_modules/jshint/bin/jshint) && echo 'Lint Successfull!') || true",
+    "frontend_tests": "mocha || true"
   },
   "author": "osdc",
   "license": "BSD-2-Clause",
