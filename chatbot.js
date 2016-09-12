@@ -102,6 +102,8 @@ if (TEST_FLAG) {
     terminal: false
   });
   const readFromStdin = () => {
+    console.log(
+      'Server running successfully. Type "@osdc-bot help" to get started..');
     rl.on('line', (line) => {
       replyToUser('testUser', line);
     });
