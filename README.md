@@ -14,8 +14,8 @@ $ pip install -r requirements.txt
 ### Running:
 
 ```
-$ node chatbot.js
 $ python server.py
+$ TEST=true node chatbot.js # Run locally with I/O to stdin and stdout.
 ```
 
 ### Testing:
