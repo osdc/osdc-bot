@@ -1,15 +1,24 @@
 {
-  "name": "faye-client",
+  "name": "osdc-bot",
   "version": "0.0.1",
-  "description": "Node example client for the Gitter Faye API",
-  "main": "faye-client.js",
+  "description": "Fun-loving faye bot residing at https://gitter.im/osdc/Hackers",
+  "main": "node chatbot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "(./node_modules/.bin/eslint ./**/*.js --quiet ; find . -path ./node_modules -prune -o -name '*.js' -print | xargs ./node_modules/jshint/bin/jshint) && echo 'Lint Successfull!'",
+    "frontend_tests": "mocha"
   },
-  "author": "@malditogeek",
+  "author": "osdc",
   "license": "BSD-2-Clause",
   "dependencies": {
     "faye": "~1.0.1",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "sqlite3": "^3.1.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-spies": "^0.7.1",
+    "eslint": "^3.4.0",
+    "jshint": "^2.9.3",
+    "mocha": "^3.0.2"
   }
 }

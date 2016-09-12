@@ -1,0 +1,14 @@
+{
+  "esversion": 6,
+  "node": true,
+  "mocha": true,
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "nonbsp": true,
+  "notypeof": true,
+  "shadow": true,
+  "undef": true,
+  "unused": "strict",
+  "varstmt": true
+}
