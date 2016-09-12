@@ -1,21 +1,27 @@
 'use strict';
 const request = require('request');
 const constants = require('./constants');
+const TEST_FLAG = process.env.TEST;
 
-const _postBotReply = (message, username) => {
-  request({
-    url: constants.CHATROOM_URL,
-    headers: {
-      Authorization : `Bearer ${constants.TOKEN}`
-    },
-    method: 'POST',
-    json: true,
-    body: {
-      text: (username ? `@${username} ${message}` : message)
-    }
-  });
+const postBotReply = (message, username) => {
+  const text = username ? `@${username} ${message}` : message;
+  if (TEST_FLAG) {
+    console.log(text);
+  } else {
+    request({
+      url: constants.CHATROOM_URL,
+      headers: {
+        Authorization : `Bearer ${constants.TOKEN}`
+      },
+      method: 'POST',
+      json: true,
+      body: {
+        text
+      }
+    });
+  }
 };
 
 module.exports = {
-  postBotReply: _postBotReply
+  postBotReply
 };

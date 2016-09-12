@@ -1,7 +1,5 @@
 'use strict';
 /* eslint-disable no-console */
-const Faye = require('faye');
-
 const constants = require('./constants');
 const utils = require('./utils');
 const api = require('./api');
@@ -16,7 +14,8 @@ const quotation = require('./services/quoteService.js');
 const define = require('./services/defineService.js');
 const karma = require('./services/karmaService.js');
 
-const DEPLOY_FLAG = process.env.DEPLOY || false;
+const DEPLOY_FLAG = process.env.DEPLOY;
+const TEST_FLAG = process.env.TEST;
 
 // Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
@@ -65,20 +64,10 @@ const replyToUser = (user, message) => {
   }
 };
 
-// Authentication extension
-let ClientAuthExt = function() {};
-
-ClientAuthExt.prototype = {
-  outgoing: (message, callback) => {
+const getClientAuthExt = () => {
+  const incoming = (message, callback) => {
     if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
-      if (!message.ext) { message.ext = {}; }
-      message.ext.token = constants.TOKEN;
-    }
-    callback(message);
-  },
-  incoming: (message, callback) => {
-    if(message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
-      if(message.successful) {
+      if (message.successful) {
         console.log('Successfuly subscribed to room: ', constants.ROOM_ID);
         if (DEPLOY_FLAG) {
           api.postBotReply('Deployment Successful');
@@ -88,23 +77,55 @@ ClientAuthExt.prototype = {
       }
     }
     callback(message);
-  }
+  };
+
+  const outgoing = (message, callback) => {
+    if (message.channel === constants.META_HANDSHAKE_SUFFIX_URL) {
+      if (!message.ext) { message.ext = {}; }
+      message.ext.token = constants.TOKEN;
+    }
+    callback(message);
+  };
+
+  return {
+    outgoing,
+    incoming
+  };
 };
 
-// Faye client
-const client = new Faye.Client(constants.FAYE_CLIENT_URL, {
-  timeout: 60,
-  retry: 5,
-  interval: 1
-});
+if (TEST_FLAG) {
+  // Run like an REPL for local testing.
+  const readline = require('readline');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false
+  });
+  const readFromStdin = () => {
+    console.log(
+      'Server running successfully. Type "@osdc-bot help" to get started..');
+    rl.on('line', (line) => {
+      replyToUser('testUser', line);
+    });
+  };
+  readFromStdin();
+} else {
+  // Faye client
+  const Faye = require('faye');
+  const client = new Faye.Client(constants.FAYE_CLIENT_URL, {
+    timeout: 60,
+    retry: 5,
+    interval: 1
+  });
+  // Create and add the Client Authentication extension.
 
-// Add Client Authentication extension
-client.addExtension(new ClientAuthExt());
-client.subscribe(constants.CLIENT_SUBSCRIBE_URL, (msg) => {
-  if (msg.model && msg.model.fromUser) {
-    console.log('Message: ', msg.model.text);
-    console.log('From: ', msg.model.fromUser.displayName);
+  client.addExtension(getClientAuthExt());
+  client.subscribe(constants.CLIENT_SUBSCRIBE_URL, (msg) => {
+    if (msg.model && msg.model.fromUser) {
+      console.log('Message: ', msg.model.text);
+      console.log('From: ', msg.model.fromUser.displayName);
 
-    replyToUser(msg.model.fromUser, msg.model.text);
-  }
-}, {});
+      replyToUser(msg.model.fromUser, msg.model.text);
+    }
+  }, {});
+}
