@@ -3,7 +3,7 @@ const request = require('request');
 const constants = require('./constants');
 const TEST_FLAG = process.env.TEST;
 
-const postBotReply = (message, username, test) => {
+const postBotReply = (message, username) => {
   const text = username ? `@${username} ${message}` : message;
   if (TEST_FLAG) {
     console.log(text);

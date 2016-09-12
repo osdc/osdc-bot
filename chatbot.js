@@ -75,7 +75,7 @@ const getClientAuthExt = () => {
       } else {
         console.log('Something went wrong: ', message.error);
       }
-    };
+    }
     callback(message);
   };
 
