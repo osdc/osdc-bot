@@ -4,7 +4,7 @@ const constants = require('../constants');
 
 const utils = require('../utils');
 
-describe('Module utils', function() {
+describe('Module utils', () => {
   const BOT_ACTIONS = constants.BOT_ACTIONS;
 
   it('should get startsWith correctly', () => {

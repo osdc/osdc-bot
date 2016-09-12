@@ -14,7 +14,7 @@ describe('Module howdoiService', () => {
       'howdoi declare array in python',
       'howdoi abc xyz'
     ];
-    sampleQueries.forEach(function(query) {
+    sampleQueries.forEach((query) => {
       request.get(
         constants.SERVER_HOWDOI_PREFIX_URL + query, (error, response, body) => {
           expect(response.statusCode).to.equal(200);
