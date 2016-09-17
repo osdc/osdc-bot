@@ -3,6 +3,9 @@ const sqlite3 = require('sqlite3');
 const config = require('../config');
 const db = new sqlite3.Database(config.dbFilePath);
 
+// Database schema for karma:
+// CREATE TABLE karma (username varchar(255), point smallint);
+
 const parseAllUserKarma = (callback, rows) => {
   let message = 'Karma Table: \n';
   for (let row in rows) {
