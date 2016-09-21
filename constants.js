@@ -4,7 +4,7 @@ const config = require('./config');
 const ROOM_ID = config.roomId;
 const TOKEN = config.token;
 
-const BOT_MENTION_NAME = '@osdc-bot';
+const BOT_MENTION_NAME = 'test';
 const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',
@@ -34,6 +34,7 @@ const QUOTES_API_URL = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=
 const WIKI_API_PREFIX_URL = 'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=4&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
 const WIKI_ARTICLE_PREFIX_URL = 'https://en.wikipedia.org/?curid=';
 const KELVIN_CELCIUS_OFFSET = 273;
+const SERVER_GENERAL_URL = `${SERVER_PREFIX_URL}/general?query=`;
 const DEFINE_API_URL = 'https://mashape-community-urban-dictionary.p.mashape.com/define';
 const DEFINE_API_KEY = 'MRn5Ke2MMTmshHp839whoCom3Nx2p1Fsdo5jsnBBhSTxU3Zdo2';
 
@@ -50,6 +51,7 @@ module.exports = {
   SERVER_PREFIX_URL,
   SERVER_DEPLOY_URL,
   SERVER_HOWDOI_PREFIX_URL,
+  SERVER_GENERAL_URL,
   JOKES_API_URL,
   PLACES_API_PREFIX_URL,
   QUOTES_API_URL,

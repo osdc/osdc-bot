@@ -1,6 +1,7 @@
 'use strict';
 /* eslint-disable no-console */
 const Faye = require('faye');
+const request = require('request');
 
 const constants = require('./constants');
 const utils = require('./utils');
@@ -19,14 +20,25 @@ const DEPLOY_FLAG = process.env.DEPLOY || false;
 
 // Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
-  const username = user.username;
-
-  if (message.startsWith(constants.BOT_MENTION_NAME)) {
+    const username = user.username;
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
-    const startsWithString = utils.getStartsWith(parsedMessage);
-    const cityName = parsedMessage.substr(parsedMessage.indexOf(' ') + 1);
+    if (message.startsWith(constants.BOT_MENTION_NAME)) {
+    var query = encodeURIComponent(parsedMessage);
+    console.log(query);
+      request({
+        url: constants.SERVER_GENERAL_URL + query,
+        method: "GET"
+      }, (error, response, body) => {
+        console.log(body);
+        callSpecificService(username,body);
+      });
+    
+};
 
-    if (startsWithString === constants.BOT_ACTIONS.HELP) {
+const callSpecificService = (username,message) => {
+   const startsWithString = utils.getStartsWith(message);
+   const cityName = message.substr(message.indexOf(' ') + 1);
+   if (startsWithString === constants.BOT_ACTIONS.HELP) {
       api.postBotReply(utils.generateBotHelp(), username);
     } else if (startsWithString === constants.BOT_ACTIONS.JOKE) {
       joker.getJoke(api.postBotReply, username);
@@ -38,12 +50,12 @@ const replyToUser = (user, message) => {
       howdoi.getHowdoiResult(
         api.postBotReply,
         encodeURIComponent(
-          parsedMessage.slice(constants.BOT_ACTIONS.HOWDOI.length + 1)));
+          message.slice(constants.BOT_ACTIONS.HOWDOI.length + 1)));
     } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
       wiki(
         api.postBotReply,
         username,
-        parsedMessage.slice(constants.BOT_ACTIONS.WIKI.length + 1));
+        message.slice(constants.BOT_ACTIONS.WIKI.length + 1));
     } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
       weather.getWeather(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
@@ -51,8 +63,11 @@ const replyToUser = (user, message) => {
     } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
       define.define(api.postBotReply, username, cityName);
     }
+    else{
+      api.postBotReply(message,username)
+    }
   }
-};
+}
 
 // Authentication extension
 let ClientAuthExt = function() {};
