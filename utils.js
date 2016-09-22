@@ -1,7 +1,7 @@
 'use strict';
 const constants = require('./constants');
 
-const _getStartsWith = (parsedMessage) => {
+const getStartsWith = (parsedMessage) => {
   let result = null;
   if (!parsedMessage) {
     return result;
@@ -18,7 +18,7 @@ const _getStartsWith = (parsedMessage) => {
   return result;
 };
 
-const _generateBotHelp = () => {
+const generateBotHelp = () => {
   let resultString = 'You can:';
   for (let botAction in constants.BOT_ACTIONS) {
     resultString += `\n- ${constants.BOT_ACTIONS[botAction]}`;
@@ -27,6 +27,6 @@ const _generateBotHelp = () => {
 };
 
 module.exports = {
-  getStartsWith: _getStartsWith,
-  generateBotHelp: _generateBotHelp
+  getStartsWith,
+  generateBotHelp
 };

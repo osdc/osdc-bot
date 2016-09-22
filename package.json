@@ -4,14 +4,15 @@
   "description": "Fun-loving faye bot residing at https://gitter.im/osdc/Hackers",
   "main": "node chatbot.js",
   "scripts": {
-    "lint": "((./node_modules/.bin/eslint ./**/*.js --quiet ; find . -path ./node_modules -prune -o -name '*.js' -print | xargs ./node_modules/jshint/bin/jshint) && echo 'Lint Successfull!') || true",
-    "frontend_tests": "mocha || true"
+    "lint": "(./node_modules/.bin/eslint ./**/*.js --quiet ; find . -path ./node_modules -prune -o -name '*.js' -print | xargs ./node_modules/jshint/bin/jshint) && echo 'Lint Successfull!'",
+    "frontend_tests": "mocha"
   },
   "author": "osdc",
   "license": "BSD-2-Clause",
   "dependencies": {
     "faye": "~1.0.1",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "sqlite3": "^3.1.4"
   },
   "devDependencies": {
     "chai": "^3.5.0",
