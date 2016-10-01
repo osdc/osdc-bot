@@ -24,7 +24,7 @@ const replyToUser = (user, message) => {
     const username = user.username;
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
     if (message.startsWith(constants.BOT_MENTION_NAME)) {
-    var query = encodeURIComponent(parsedMessage);
+    const query = encodeURIComponent(parsedMessage);
     console.log(query);
       request({
         url: constants.SERVER_GENERAL_URL + query,
@@ -33,7 +33,7 @@ const replyToUser = (user, message) => {
         console.log(body + error + response);
         callSpecificService(username,body);
       });   
-};
+}
 
 const callSpecificService = (username,message) => {
    const startsWithString = utils.getStartsWith(message);
