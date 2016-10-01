@@ -1,6 +1,6 @@
 'use strict';
 /* eslint-disable no-console */
-const Faye = require('faye');
+
 const request = require('request');
 
 const constants = require('./constants');
@@ -30,10 +30,9 @@ const replyToUser = (user, message) => {
         url: constants.SERVER_GENERAL_URL + query,
         method: "GET"
       }, (error, response, body) => {
-        console.log(body);
+        console.log(body + error + response);
         callSpecificService(username,body);
-      });
-    
+      });   
 };
 
 const callSpecificService = (username,message) => {
@@ -65,10 +64,10 @@ const callSpecificService = (username,message) => {
       define.define(api.postBotReply, username, cityName);
     }
     else{
-      api.postBotReply(message,username)
+      api.postBotReply(message,username);
     }
-  }
-}
+  };
+};
 
 const getClientAuthExt = () => {
   const incoming = (message, callback) => {
