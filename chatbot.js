@@ -1,8 +1,6 @@
 'use strict';
 /* eslint-disable no-console */
 
-const request = require('request');
-
 const constants = require('./constants');
 const utils = require('./utils');
 const api = require('./api');
@@ -15,27 +13,13 @@ const weather = require('./services/weatherService');
 const places = require('./services/mapService');
 const quotation = require('./services/quoteService.js');
 const define = require('./services/defineService.js');
+const karma = require('./services/karmaService.js');
 
-const DEPLOY_FLAG = process.env.DEPLOY || false;
-const TEST_FLAG = process.env.TEST || false;
+const DEPLOY_FLAG = process.env.DEPLOY;
+const TEST_FLAG = process.env.TEST;
 
-// Main function which handles the user input and decides what needs to be done.
-const replyToUser = (user, message) => {
-    const username = user.username;
-    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
-    if (message.startsWith(constants.BOT_MENTION_NAME)) {
-    const query = encodeURIComponent(parsedMessage);
-    console.log(query);
-      request({
-        url: constants.SERVER_GENERAL_URL + query,
-        method: "GET"
-      }, (error, response, body) => {
-        console.log(body + error + response);
-        callSpecificService(username,body);
-      });   
-}
 
-const callSpecificService = (username,message) => {
+const callSpecificService = (username, message, parsedMessage) => {
    const startsWithString = utils.getStartsWith(message);
    const cityName = message.substr(message.indexOf(' ') + 1);
    if (startsWithString === constants.BOT_ACTIONS.HELP) {
@@ -62,11 +46,32 @@ const callSpecificService = (username,message) => {
       places.getPlaces(api.postBotReply, username, cityName);
     } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
       define.define(api.postBotReply, username, cityName);
+    } else if (startsWithString === constants.BOT_ACTIONS.KARMA) {
+      const msgBody = parsedMessage.split(' ');
+      const karmaUser = msgBody[1];
+      if (karmaUser === "all") {
+        karma.getKarma(api.postBotReply);
+      } else if (msgBody[2] === "++") {
+        karma.giveKarma(api.postBotReply, karmaUser, 1);
+      } else if (msgBody[2] === "--") {
+        karma.giveKarma(api.postBotReply, karmaUser, -1);
+      }
     }
-    else{
+    else {
       api.postBotReply(message,username);
     }
   };
+
+// Main function which handles the user input and decides what needs to be done.
+const replyToUser = (user, message) => {
+    const username = user.username;
+    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
+    if (message.startsWith(constants.BOT_MENTION_NAME)) {
+      const query = encodeURIComponent(parsedMessage);
+      const receivedMessage = api.message_parse(query);
+      console.log(query);
+      callSpecificService(username, receivedMessage, parsedMessage);
+    }
 };
 
 const getClientAuthExt = () => {
