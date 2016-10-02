@@ -7,10 +7,10 @@ const db = new sqlite3.Database(config.dbFilePath);
 // CREATE TABLE karma (username varchar(255), point smallint);
 
 const parseAllUserKarma = (callback, rows) => {
-  let message = 'Karma Table: \n';
-  for (let row in rows) {
-    message += `${rows[row].username}: ${rows[row].totalKarma}\n`;
-  }
+  let message = '|Username|Karma|\n|-|-|\n';
+  rows.forEach((row) => {
+    message += '|' + row.username + '|' + row.totalKarma + '|\n';
+  });
   callback(message);
 };
 
