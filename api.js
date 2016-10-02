@@ -30,8 +30,9 @@ const message_parse = (query) => {
         console.log(body + error + response);
         return body;
       });   
-}
+};
 
 module.exports = {
-  postBotReply
+  postBotReply,
+  message_parse
 };
