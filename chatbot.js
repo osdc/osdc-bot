@@ -56,8 +56,7 @@ const getBotReply = (username, message, parsedMessage) => {
       } else if (msgBody[2] === "--") {
         karma.giveKarma(api.postBotReply, karmaUser, -1);
       }
-    }
-    else {
+    } else {
       api.postBotReply(message, username);
     }
   };
