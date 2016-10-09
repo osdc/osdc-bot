@@ -22,14 +22,14 @@ const postBotReply = (message, username) => {
   }
 };
 
-const getParsedMessage = (query, callSpecificService, username, parsedMessage) => {
+const getParsedMessage = (query, getBotReply, username, parsedMessage) => {
   console.log(query);
    request({
         url: constants.SERVER_MESSAGE_PARSER_PREFIX_URL + query,
         method: 'GET'
       }, (error, response, body) => {
         console.log(error, body, response);
-        callSpecificService(username, body, parsedMessage);
+        getBotReply(username, body, parsedMessage);
       });
 };
 

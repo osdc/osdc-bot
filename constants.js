@@ -4,7 +4,7 @@ const config = require('./config');
 const ROOM_ID = config.roomId;
 const TOKEN = config.token;
 
-const BOT_MENTION_NAME = 'test';
+const BOT_MENTION_NAME = '@osdc-bot';
 const BOT_ACTIONS = {
   HELP: 'help',
   JOKE: 'joke',

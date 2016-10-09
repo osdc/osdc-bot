@@ -1,7 +1,7 @@
 from flask import(
     Flask,
     request
-    )
+)
 from message_chunker import message_chunk
 
 import soldier
@@ -15,7 +15,9 @@ def deploy():
     screen_kill_comm = "screen -S {} -X quit".format(screen_name)
     screen_start_comm = 'screen -S "{}" -d -m'.format(screen_name)
     update_local_comm = "git pull origin master"
-    start_bot_comm = 'screen -r "{0}" -X stuff "{1}"'.format(screen_name, "DEPLOY=1 nodejs chatbot.js\n")
+    start_bot_comm = (
+        'screen -r "{0}" -X stuff "{1}"'.format(
+            screen_name, "DEPLOY=1 nodejs chatbot.js\n"))
     try:
         soldier.run(screen_kill_comm)
     except:
@@ -37,8 +39,8 @@ def howdoi():
 @app.route('/message_parser')
 def message_parser():
     command = request.args['query']
-    outputCommand = message_chunk(command)
-    return outputCommand
+    return message_chunk(command)
+
 
 def runner():
     try:
