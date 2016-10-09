@@ -26,7 +26,16 @@ const CHATROOM_URL = `https://api.gitter.im${CHATROOM_SUFFIX_URL}`;
 const SERVER_PREFIX_URL = 'http://127.0.0.1:5000';
 const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
 const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
-const JOKES_API_URL =[ 'http://api.icndb.com/jokes/random','http://tambal.azurewebsites.net/joke/random'];
+const JOKES_API_INFO = [
+  {
+    url: 'http://api.icndb.com/jokes/random',
+    getJokeText: (body) => (JSON.parse(body).value.joke)
+  },
+  {
+    url: 'http://tambal.azurewebsites.net/joke/random',
+    getJokeText: (body) => (JSON.parse(body).joke)
+  }
+];
 const PLACES_API_KEY = 'AIzaSyC25RQflehd0mWD6mTTxWs_AcH6Gq1o4Q8';
 const PLACES_API_PREFIX_URL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?types=establishment&key=${PLACES_API_KEY}&input=`;
 const WEATHER_API_KEY = '5ce8ec77d11e6b31bbca4a128afd3b6d';
@@ -51,7 +60,7 @@ module.exports = {
   SERVER_PREFIX_URL,
   SERVER_DEPLOY_URL,
   SERVER_HOWDOI_PREFIX_URL,
-  JOKES_API_URL,
+  JOKES_API_INFO,
   PLACES_API_PREFIX_URL,
   QUOTES_API_URL,
   WEATHER_API_PREFIX_URL,

@@ -4,15 +4,11 @@ const constants = require('../constants');
 
 module.exports = {
   getJoke: (callback, username) => {
-    const index = Math.floor(Math.random() * constants.JOKES_API_URL.length);
-    const randomQuote =  constants.JOKES_API_URL[index];
-    request(randomQuote, (error, response, body) => {
+    const index = Math.floor(Math.random() * constants.JOKES_API_INFO.length);
+    const randomJokeObject = constants.JOKES_API_INFO[index];
+    request(randomJokeObject.url, (error, response, body) => {
       if (!error && response.statusCode === 200) {
-        if (index === 0) {
-          return callback(JSON.parse(body).value.joke, username);
-        } else {
-          return callback(JSON.parse(body).joke, username);      
-        }
+        return callback(randomJokeObject.getJokeText(body), username);
       }
     });
   }
