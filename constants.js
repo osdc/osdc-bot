@@ -27,7 +27,6 @@ const SERVER_PREFIX_URL = 'http://127.0.0.1:5000';
 const SERVER_DEPLOY_URL = `${SERVER_PREFIX_URL}/deploy`;
 const SERVER_HOWDOI_PREFIX_URL = `${SERVER_PREFIX_URL}/howdoi?query=`;
 const SERVER_MESSAGE_PARSER_PREFIX_URL = `${SERVER_PREFIX_URL}/message_parser?query=`;
-const JOKES_API_URL = 'http://api.icndb.com/jokes/random';
 const JOKES_API_INFO = [
   {
     url: 'http://api.icndb.com/jokes/random',
@@ -64,7 +63,6 @@ module.exports = {
   SERVER_MESSAGE_PARSER_PREFIX_URL,
   SERVER_HOWDOI_PREFIX_URL,
   JOKES_API_INFO,
-  JOKES_API_URL,
   PLACES_API_PREFIX_URL,
   QUOTES_API_URL,
   WEATHER_API_PREFIX_URL,
