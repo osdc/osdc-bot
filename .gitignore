@@ -3,3 +3,4 @@ config.js
 npm-debug.log
 *.swp
 *.swo
+*.pyc
