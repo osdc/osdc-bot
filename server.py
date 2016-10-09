@@ -1,5 +1,7 @@
-from flask import Flask
-from flask import request
+from flask import(
+    Flask,
+    request
+    )
 from message_chunker import message_chunk
 
 import soldier

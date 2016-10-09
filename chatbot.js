@@ -19,7 +19,7 @@ const DEPLOY_FLAG = process.env.DEPLOY;
 const TEST_FLAG = process.env.TEST;
 
 
-const callSpecificService = (username, message, parsedMessage) => {
+const getBotReply = (username, message, parsedMessage) => {
    const startsWithString = utils.getStartsWith(message);
    const cityName = message.substr(message.indexOf(' ') + 1);
    if (startsWithString === constants.BOT_ACTIONS.HELP) {
@@ -58,7 +58,7 @@ const callSpecificService = (username, message, parsedMessage) => {
       }
     }
     else {
-      api.postBotReply(message,username);
+      api.postBotReply(message, username);
     }
   };
 
@@ -68,7 +68,7 @@ const replyToUser = (user, message) => {
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
     if (message.startsWith(constants.BOT_MENTION_NAME)) {
       const query = encodeURIComponent(parsedMessage);
-      api.message_parse(query, callSpecificService, username, parsedMessage);
+      api.getParsedMessage(query, getBotReply, username, parsedMessage);
     }
 };
 

@@ -22,10 +22,10 @@ const postBotReply = (message, username) => {
   }
 };
 
-const message_parse = (query, callSpecificService, username, parsedMessage) => {
+const getParsedMessage = (query, callSpecificService, username, parsedMessage) => {
   console.log(query);
    request({
-        url: constants.SERVER_MESSAGE_PARSER_URL + query,
+        url: constants.SERVER_MESSAGE_PARSER_PREFIX_URL + query,
         method: 'GET'
       }, (error, response, body) => {
         console.log(error, body, response);
@@ -35,5 +35,5 @@ const message_parse = (query, callSpecificService, username, parsedMessage) => {
 
 module.exports = {
   postBotReply,
-  message_parse
+  getParsedMessage
 };
