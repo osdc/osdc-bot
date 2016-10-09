@@ -22,14 +22,15 @@ const postBotReply = (message, username) => {
   }
 };
 
-const message_parse = (query) => {
+const message_parse = (query, callSpecificService, username, parsedMessage) => {
+  console.log(query);
    request({
         url: constants.SERVER_MESSAGE_PARSER_URL + query,
         method: 'GET'
       }, (error, response, body) => {
-        console.log(body + error + response);
-        return body;
-      });   
+        console.log(error, body, response);
+        callSpecificService(username, body, parsedMessage);
+      });
 };
 
 module.exports = {

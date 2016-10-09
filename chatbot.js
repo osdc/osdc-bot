@@ -68,9 +68,7 @@ const replyToUser = (user, message) => {
     const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
     if (message.startsWith(constants.BOT_MENTION_NAME)) {
       const query = encodeURIComponent(parsedMessage);
-      const receivedMessage = api.message_parse(query);
-      console.log(query);
-      callSpecificService(username, receivedMessage, parsedMessage);
+      api.message_parse(query, callSpecificService, username, parsedMessage);
     }
 };
 
