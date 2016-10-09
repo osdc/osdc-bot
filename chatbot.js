@@ -63,12 +63,12 @@ const getBotReply = (username, message, parsedMessage) => {
 
 // Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
-    const username = user.username;
-    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
-    if (message.startsWith(constants.BOT_MENTION_NAME)) {
-      const query = encodeURIComponent(parsedMessage);
-      api.getParsedMessage(query, getBotReply, username, parsedMessage);
-    }
+  const username = user.username;
+  const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
+  if (message.startsWith(constants.BOT_MENTION_NAME)) {
+    const query = encodeURIComponent(parsedMessage);
+    api.getParsedMessage(query, getBotReply, username, parsedMessage);
+  }
 };
 
 const getClientAuthExt = () => {
