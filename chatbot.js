@@ -1,5 +1,6 @@
 'use strict';
 /* eslint-disable no-console */
+
 const constants = require('./constants');
 const utils = require('./utils');
 const api = require('./api');
@@ -17,50 +18,56 @@ const karma = require('./services/karmaService.js');
 const DEPLOY_FLAG = process.env.DEPLOY;
 const TEST_FLAG = process.env.TEST;
 
+
+const getBotReply = (username, message, parsedMessage) => {
+  const startsWithString = utils.getStartsWith(message);
+  const cityName = message.substr(message.indexOf(' ') + 1);
+  if (startsWithString === constants.BOT_ACTIONS.HELP) {
+      api.postBotReply(utils.generateBotHelp(), username);
+  } else if (startsWithString === constants.BOT_ACTIONS.JOKE) {
+    joker.getJoke(api.postBotReply, username);
+  } else if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
+    deployer.deployToProd();
+  } else if (startsWithString === constants.BOT_ACTIONS.QUOTE){
+    quotation.getQuote(api.postBotReply, username);
+  } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
+    howdoi.getHowdoiResult(
+      api.postBotReply,
+      encodeURIComponent(
+        message.slice(constants.BOT_ACTIONS.HOWDOI.length + 1)));
+  } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
+    wiki(
+      api.postBotReply,
+      username,
+      message.slice(constants.BOT_ACTIONS.WIKI.length + 1));
+  } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
+    weather.getWeather(api.postBotReply, username, cityName);
+  } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
+    places.getPlaces(api.postBotReply, username, cityName);
+  } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
+    define.define(api.postBotReply, username, cityName);
+  } else if (startsWithString === constants.BOT_ACTIONS.KARMA) {
+    const msgBody = parsedMessage.split(' ');
+    const karmaUser = msgBody[1];
+    if (karmaUser === "all") {
+      karma.getKarma(api.postBotReply);
+    } else if (msgBody[2] === "++") {
+      karma.giveKarma(api.postBotReply, karmaUser, 1);
+    } else if (msgBody[2] === "--") {
+      karma.giveKarma(api.postBotReply, karmaUser, -1);
+    }
+  } else {
+    api.postBotReply(message, username);
+  }
+};
+
 // Main function which handles the user input and decides what needs to be done.
 const replyToUser = (user, message) => {
   const username = user.username;
-
+  const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
   if (message.startsWith(constants.BOT_MENTION_NAME)) {
-    const parsedMessage = message.slice(constants.BOT_MENTION_NAME.length + 1);
-    const startsWithString = utils.getStartsWith(parsedMessage);
-    const cityName = parsedMessage.substr(parsedMessage.indexOf(' ') + 1);
-
-    if (startsWithString === constants.BOT_ACTIONS.HELP) {
-      api.postBotReply(utils.generateBotHelp(), username);
-    } else if (startsWithString === constants.BOT_ACTIONS.JOKE) {
-      joker.getJoke(api.postBotReply, username);
-    } else if (startsWithString === constants.BOT_ACTIONS.DEPLOY) {
-      deployer.deployToProd();
-    } else if (startsWithString === constants.BOT_ACTIONS.QUOTE){
-      quotation.getQuote(api.postBotReply, username);
-    } else if (startsWithString === constants.BOT_ACTIONS.HOWDOI) {
-      howdoi.getHowdoiResult(
-        api.postBotReply,
-        encodeURIComponent(
-          parsedMessage.slice(constants.BOT_ACTIONS.HOWDOI.length + 1)));
-    } else if (startsWithString === constants.BOT_ACTIONS.WIKI) {
-      wiki(
-        api.postBotReply,
-        username,
-        parsedMessage.slice(constants.BOT_ACTIONS.WIKI.length + 1));
-    } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
-      weather.getWeather(api.postBotReply, username, cityName);
-    } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
-      places.getPlaces(api.postBotReply, username, cityName);
-    } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
-      define.define(api.postBotReply, username, cityName);
-    } else if (startsWithString === constants.BOT_ACTIONS.KARMA) {
-      const msgBody = parsedMessage.split(' ');
-      const karmaUser = msgBody[1];
-      if (karmaUser === "all") {
-        karma.getKarma(api.postBotReply);
-      } else if (msgBody[2] === "++") {
-        karma.giveKarma(api.postBotReply, karmaUser, 1);
-      } else if (msgBody[2] === "--") {
-        karma.giveKarma(api.postBotReply, karmaUser, -1);
-      }
-    }
+    const query = encodeURIComponent(parsedMessage);
+    api.getParsedMessage(query, getBotReply, username, parsedMessage);
   }
 };
 

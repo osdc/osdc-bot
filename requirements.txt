@@ -1,3 +1,4 @@
 soldier==0.1
 Flask==0.11.1
 howdoi==1.1.9
+nltk==3.2.1
