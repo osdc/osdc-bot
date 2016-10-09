@@ -9,8 +9,8 @@ def message_chunk(command):
     words = nltk.word_tokenize(command)
     tagged_tokens = nltk.pos_tag(words)
     output_command = ''
-    for x in tagged_tokens:
-        if x[0] in ['wiki', 'wikipedia']:
+    for token in tagged_tokens:
+        if token[0] in ['wiki', 'wikipedia']:
             output_command += 'wiki'
     regular_expression = r"""
                 NP: {<NN|NNP|NNS>?<DT|PP\$>?<JJ>*<NN|NNS><IN>?<NN|NNP|NNS>+}
