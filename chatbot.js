@@ -51,9 +51,9 @@ const getBotReply = (username, message, parsedMessage) => {
     const karmaUser = msgBody[1];
     if (karmaUser === "all") {
       karma.getKarma(api.postBotReply);
-    } else if (msgBody[2] === "++") {
+    } else if (msgBody[2].trim() === "++") {
       karma.giveKarma(api.postBotReply, karmaUser, 1);
-    } else if (msgBody[2] === "--") {
+    } else if (msgBody[2].trim() === "--") {
       karma.giveKarma(api.postBotReply, karmaUser, -1);
     }
   } else {
