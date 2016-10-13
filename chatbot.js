@@ -46,14 +46,14 @@ const getBotReply = (username, message, parsedMessage) => {
     places.getPlaces(api.postBotReply, username, cityName);
   } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
     define.define(api.postBotReply, username, cityName);
-  } else if (startsWithString === constants.BOT_ACTIONS.KARMA) {
+  } else if (utils.getStartsWith(parsedMessage) === constants.BOT_ACTIONS.KARMA) {
     const msgBody = parsedMessage.split(' ');
     const karmaUser = msgBody[1];
     if (karmaUser === "all") {
       karma.getKarma(api.postBotReply);
-    } else if (msgBody[2] === "++") {
+    } else if (msgBody[2].trim() === "++") {
       karma.giveKarma(api.postBotReply, karmaUser, 1);
-    } else if (msgBody[2] === "--") {
+    } else if (msgBody[2].trim() === "--") {
       karma.giveKarma(api.postBotReply, karmaUser, -1);
     }
   } else {
