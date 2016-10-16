@@ -15,7 +15,8 @@ const BOT_ACTIONS = {
   WEATHER: 'weather',
   PLACES: 'locate',
   DEFINE: 'define',
-  KARMA: 'karma'
+  KARMA: 'karma',
+  INSULT: 'insult'
 };
 
 const META_HANDSHAKE_SUFFIX_URL = '/meta/handshake';
@@ -47,6 +48,7 @@ const WIKI_ARTICLE_PREFIX_URL = 'https://en.wikipedia.org/?curid=';
 const KELVIN_CELCIUS_OFFSET = 273;
 const DEFINE_API_URL = 'https://mashape-community-urban-dictionary.p.mashape.com/define';
 const DEFINE_API_KEY = 'MRn5Ke2MMTmshHp839whoCom3Nx2p1Fsdo5jsnBBhSTxU3Zdo2';
+const INSULTS_API_URL = 'https://quandyfactory.com/insult/json';
 
 module.exports = {
   BOT_MENTION_NAME,
@@ -70,5 +72,6 @@ module.exports = {
   WIKI_ARTICLE_PREFIX_URL,
   KELVIN_CELCIUS_OFFSET,
   DEFINE_API_URL,
-  DEFINE_API_KEY
+  DEFINE_API_KEY,
+  INSULTS_API_URL
 };
