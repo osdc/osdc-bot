@@ -14,7 +14,7 @@ const places = require('./services/mapService');
 const quotation = require('./services/quoteService.js');
 const define = require('./services/defineService.js');
 const karma = require('./services/karmaService.js');
-const insult = require('./services/insultService.js');
+const insulter = require('./services/insultService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY;
 const TEST_FLAG = process.env.TEST;
@@ -22,7 +22,7 @@ const TEST_FLAG = process.env.TEST;
 
 const getBotReply = (username, message, parsedMessage) => {
   const startsWithString = utils.getStartsWith(message);
-  const cityName = message.substr(message.indexOf(' ') + 1);
+  const actionArgument = message.substr(message.indexOf(' ') + 1);
   if (startsWithString === constants.BOT_ACTIONS.HELP) {
       api.postBotReply(utils.generateBotHelp(), username);
   } else if (startsWithString === constants.BOT_ACTIONS.JOKE) {
@@ -42,13 +42,13 @@ const getBotReply = (username, message, parsedMessage) => {
       username,
       message.slice(constants.BOT_ACTIONS.WIKI.length + 1));
   } else if (startsWithString === constants.BOT_ACTIONS.WEATHER) {
-    weather.getWeather(api.postBotReply, username, cityName);
+    weather.getWeather(api.postBotReply, username, actionArgument);
   } else if (startsWithString === constants.BOT_ACTIONS.PLACES) {
-    places.getPlaces(api.postBotReply, username, cityName);
+    places.getPlaces(api.postBotReply, username, actionArgument);
   } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
-    define.define(api.postBotReply, username, cityName);
+    define.define(api.postBotReply, username, actionArgument);
   } else if (startsWithString === constants.BOT_ACTIONS.INSULT) {
-    insult.insult(api.postBotReply, cityName);
+    insulter.getInsult(api.postBotReply, actionArgument);
   } else if (utils.getStartsWith(parsedMessage) === constants.BOT_ACTIONS.KARMA) {
     const msgBody = parsedMessage.split(' ');
     const karmaUser = msgBody[1];
