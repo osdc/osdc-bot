@@ -24,4 +24,4 @@ install:
 
 script:
   - if [ $RUN_LINT == 'true' ]; then npm run-script lint; fi
-  - if [ $RUN_FRONTEND_UNIT_TESTS == 'true' ]; then npm run-script frontend_tests; fi
+  - if [ $RUN_FRONTEND_TESTS == 'true' ]; then npm run-script frontend_tests; fi

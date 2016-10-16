@@ -10,10 +10,12 @@ describe('Module jokeService', () => {
   chai.use(spies);
 
   it('should fetch the joke correctly from the api', () => {
-    request.get(constants.JOKES_API_URL, (error, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(JSON.parse(body).value).to.have.property('joke');
-      expect(error).to.equal({});
+    constants.JOKES_API_INFO.forEach((jokeInfo) => {
+      request.get(jokeInfo.url, (error, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(jokeInfo.getJokeText(body)).to.be.a('string');
+        expect(error).to.equal(null);
+      });
     });
   });
 
