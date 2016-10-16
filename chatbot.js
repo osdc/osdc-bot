@@ -14,6 +14,7 @@ const places = require('./services/mapService');
 const quotation = require('./services/quoteService.js');
 const define = require('./services/defineService.js');
 const karma = require('./services/karmaService.js');
+const insult = require('./services/insultService.js');
 
 const DEPLOY_FLAG = process.env.DEPLOY;
 const TEST_FLAG = process.env.TEST;
@@ -46,6 +47,8 @@ const getBotReply = (username, message, parsedMessage) => {
     places.getPlaces(api.postBotReply, username, cityName);
   } else if (startsWithString === constants.BOT_ACTIONS.DEFINE) {
     define.define(api.postBotReply, username, cityName);
+  } else if (startsWithString === constants.BOT_ACTIONS.INSULT) {
+    insult.insult(api.postBotReply, cityName);
   } else if (utils.getStartsWith(parsedMessage) === constants.BOT_ACTIONS.KARMA) {
     const msgBody = parsedMessage.split(' ');
     const karmaUser = msgBody[1];
