@@ -8,25 +8,23 @@ This bot lives at [https://gitter.im/osdc/Hackers](https://gitter.im/osdc/Hacker
 ### Installation:
 
 ```
-$ npm install
-$ pip install -r requirements.txt
+$ make install
 ```
 
-### NLTK Configuration:
+### Running locally with I/O to stdin and stdout:
 
 ```
-$ python -m nltk.downloader punkt averaged_perceptron_tagger
+$ make run
 ```
 
-### Running:
+### Running in production
 
 ```
-$ python server.py
-$ TEST=true node chatbot.js # Run locally with I/O to stdin and stdout.
+$ make serve
 ```
 
 ### Testing:
 
-Run code linter: `npm run-script lint`
-
-Run frontend tests: `npm run-script frontend_tests`
+```
+$ make test
+```
