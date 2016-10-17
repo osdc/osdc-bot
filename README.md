@@ -8,19 +8,23 @@ This bot lives at [https://gitter.im/osdc/Hackers](https://gitter.im/osdc/Hacker
 ### Installation:
 
 ```
-$ npm install
-$ pip install -r requirements.txt
+$ make install
 ```
 
-### Running:
+### Running locally with I/O to stdin and stdout:
 
 ```
-$ python server.py
-$ TEST=true node chatbot.js # Run locally with I/O to stdin and stdout.
+$ make run
+```
+
+### Running in production
+
+```
+$ make serve
 ```
 
 ### Testing:
 
-Run code linter: `npm run-script lint`
-
-Run frontend tests: `npm run-script frontend_tests`
+```
+$ make test
+```
