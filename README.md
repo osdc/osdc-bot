@@ -12,6 +12,12 @@ $ npm install
 $ pip install -r requirements.txt
 ```
 
+### NLTK Configuration:
+
+```
+$ python -m nltk.downloader punkt averaged_perceptron_tagger
+```
+
 ### Running:
 
 ```
